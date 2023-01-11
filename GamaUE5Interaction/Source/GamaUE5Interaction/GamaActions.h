@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GamaClient.h"
 #include "MessageHandler.h"
+#include "ExpParameter.h"
 #include "GamaActions.generated.h"
 
 UCLASS()

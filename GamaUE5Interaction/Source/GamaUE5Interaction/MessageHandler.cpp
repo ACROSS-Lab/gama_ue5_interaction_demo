@@ -38,16 +38,13 @@ void MessageHandler::HandleCommand(TSharedPtr<FJsonObject> MyJson)
         {
             HandleConnectionSuccessful(MyJson);
         }
+        else if (type == "CommandExecutedSuccessfully")
+        {
+            HandleCommandExecutedSuccessfully(MyJson);
+        }
         else
         {
-            if(type == "CommandExecutedSuccessfully")
-            {
-                HandleCommandExecutedSuccessfully(MyJson);
-            }
-            else
-            {
                 //
-            }
         }
     }
 }

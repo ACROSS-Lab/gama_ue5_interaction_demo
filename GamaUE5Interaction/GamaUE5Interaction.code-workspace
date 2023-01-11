@@ -10,7 +10,17 @@
 		}
 	],
 	"settings": {
-		"typescript.tsc.autoDetect": "off"
+		"typescript.tsc.autoDetect": "off",
+		"files.associations": {
+			"*.tcc": "cpp",
+			"streambuf": "cpp",
+			"*.ipp": "cpp",
+			"fstream": "cpp",
+			"istream": "cpp",
+			"locale": "cpp",
+			"syncstream": "cpp",
+			"atomic": "cpp"
+		}
 	},
 	"extensions": {
 		"recommendations": [

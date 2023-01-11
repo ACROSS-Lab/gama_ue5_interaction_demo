@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Json.h"
 #include "MessageHandler.h"
+#include "ExpParameter.h"
 
 
 // Sets default values
@@ -33,22 +34,29 @@ void AGamaActions::Tick(float DeltaTime)
 	{
 		FString url = "/home/across/Documents/Gama_Workspace/UnrealTest/models/UnrealTest.gaml";
 		FString model = "prey_predator";
-		client -> load(message_handler -> GetSocketId(), url, model, true, false, false);
+		ExpParameter* parameter1 = new ExpParameter("int", "10", "Initial number of preys: ");
+		TArray<ExpParameter*> params;
+		params.Add(parameter1);
+		client -> load(message_handler -> GetSocketId(), url, model, true, false, false, params, "length(prey) < 10");
 		first = false;
 	}
 
 	// play command
-	// if(!played && message_handler -> GetExpId() > 0)
-	// {
-	// 	client -> play(message_handler -> GetSocketId(), message_handler -> GetExpId(), false);
-	// 	played = true;
-	// }
+	if(!played && message_handler -> GetExpId() > 0)
+	{
+		client -> play(message_handler -> GetSocketId(), message_handler -> GetExpId(), false);
+		played = true;
+
+	}
 
 	// step/stepBack command
-	if (message_handler -> GetExpId() > 0)
-	{
-		client -> step(message_handler -> GetSocketId(), message_handler -> GetExpId(), 2, false);
-		client -> stepBack(message_handler -> GetSocketId(), message_handler -> GetExpId(), 1, false);
-	}
+	// expression command
+	// if (message_handler -> GetExpId() > 0)
+	// {
+	// 	client -> step(message_handler -> GetSocketId(), message_handler -> GetExpId(), 2, false);
+	// 	client -> expression(message_handler -> GetSocketId(), message_handler -> GetExpId(), "length(prey)");
+	// 	// client -> stepBack(message_handler -> GetSocketId(), message_handler -> GetExpId(), 1, false);
+	// 	// client -> expression(message_handler -> GetSocketId(), message_handler -> GetExpId(), "length(predator)");
+	// }
 }
 

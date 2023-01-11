@@ -10,6 +10,7 @@
 #include "Runtime/Online/HTTP/Public/Http.h"
 #include "Serialization/JsonSerializer.h"
 #include "MessageHandler.h"
+#include "ExpParameter.h"
 
 
 GamaClient::GamaClient()
@@ -98,13 +99,23 @@ void GamaClient::exit()
     Socket -> Send(exit_command);
 }
 
-void GamaClient::load(int64 socket_id, FString file_path, FString experiment_name, bool console, bool status, bool dialog)
+void GamaClient::load(int64 socket_id, FString file_path, FString experiment_name, bool console, bool status, bool dialog, TArray<ExpParameter*> parameters, FString end_condition)
 {
     if (!Socket->IsConnected())
     {
         // Don't send if we're not connected.
         return;
     }
+
+    FString params = FString("[");
+    
+    for(int i = 0; i < parameters.Num(); i++)
+    {
+        params += parameters[i] -> Convert();
+        if(i != parameters.Num() - 1) params += (FString) ", ";
+    }
+
+    params += FString("]");
 
     FString load_command = FString("    \
     {\
@@ -115,6 +126,8 @@ void GamaClient::load(int64 socket_id, FString file_path, FString experiment_nam
         \"console\": ") + (console ? "true" : "false") + FString(",\
         \"status\": ") + (status ? "true" : "false") + FString(",\
         \"dialog\": ") + (dialog ? "true" : "false") + FString(",\
+        \"parameters\": ") + params + FString(",\
+        \"until\": \"") + end_condition + FString("\"\
     }\n") ;
 
     Socket -> Send(load_command);
@@ -211,18 +224,29 @@ void GamaClient::stop(int64 socket_id, int32 exp_id)
     Socket -> Send(stop_command);
 }
 
-void GamaClient::reload(int64 socket_id, int32 exp_id)
+void GamaClient::reload(int64 socket_id, int32 exp_id, TArray<ExpParameter*> parameters, FString end_condition)
 {
     if(!Socket -> IsConnected())
     {
         return;
     }
 
+    FString params = FString("[");
+    
+    for(int i = 0; i < parameters.Num(); i++)
+    {
+        params += parameters[i] -> Convert();
+    }
+
+    params += FString("]");
+
     FString reload_command = FString("\
     {\
         \"type\": \"reload\",\
         \"socket_id\": \"") + FString(std::to_string(socket_id).c_str()) + FString("\",\
-        \"exp_id\": \"") + FString(std::to_string(exp_id).c_str()) + FString("\"\
+        \"exp_id\": \"") + FString(std::to_string(exp_id).c_str()) + FString("\",\
+        \"params\": ") + params + FString(",\
+        \"until\": \"") + end_condition + FString("\"\
     }");
 
     Socket -> Send(reload_command);

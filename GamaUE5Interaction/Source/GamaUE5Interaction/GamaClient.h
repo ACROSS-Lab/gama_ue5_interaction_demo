@@ -9,6 +9,7 @@
 #include "IWebSocket.h"
 #include "MessageHandler.h"
 #include "GamaActionsMessageHandler.h"
+#include "ExpParameter.h"
 
 
 class GAMAUE5INTERACTION_API GamaClient
@@ -23,13 +24,13 @@ public:
 	void connect();
 	bool IsConnected();
 	void exit();
-	void load(int64 socket_id, FString file_path, FString experiment_name, bool console, bool status, bool dialog);
+	void load(int64 socket_id, FString file_path, FString experiment_name, bool console, bool status, bool dialog, TArray<ExpParameter*> parameters, FString end_condition);
 	void play(int64 socket_id, int32 exp_id, bool sync);
 	void pause(int64 socket_id, int32 exp_id);
 	void step(int64 socket_id, int32 exp_id, int32 steps, bool sync);
 	void stepBack(int64 socket_id, int32 exp_id, int32 steps, bool sync);
 	void stop(int64 socket_id, int32 exp_id);
-	void reload(int64 socket_id, int32 exp_id);
+	void reload(int64 socket_id, int32 exp_id, TArray<ExpParameter*> parameters, FString end_condition);
 	void expression(int64 socket_id, int32 exp_id, FString expr);
 	~GamaClient();
 };
