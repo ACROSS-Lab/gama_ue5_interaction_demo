@@ -21,5 +21,5 @@ public:
 	void HandleCommand(TSharedPtr<FJsonObject> MyJson);
 	virtual void HandleConnectionSuccessful(TSharedPtr<FJsonObject> MyJson) = 0;
 	virtual void HandleCommandExecutedSuccessfully(TSharedPtr<FJsonObject> MyJson) = 0;
-	~MessageHandler();
+	virtual ~MessageHandler();
 };

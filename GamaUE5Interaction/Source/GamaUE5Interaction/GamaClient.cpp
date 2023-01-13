@@ -100,7 +100,7 @@ void GamaClient::exit()
     Socket -> Send(exit_command);
 }
 
-void GamaClient::load(int64 socket_id, FString file_path, FString experiment_name, bool console = true, bool status = false, bool dialog = false, TArray<ExpParameter*> parameters = [], FString end_condition = "")
+void GamaClient::load(int64 socket_id, FString file_path, FString experiment_name, bool console, bool status, bool dialog, TArray<ExpParameter*> parameters, FString end_condition)
 {
     if (!Socket->IsConnected())
     {
@@ -134,7 +134,7 @@ void GamaClient::load(int64 socket_id, FString file_path, FString experiment_nam
     Socket -> Send(load_command);
 }
 
-void GamaClient::play(int64 socket_id, int32 exp_id, bool sync = false)
+void GamaClient::play(int64 socket_id, int32 exp_id, bool sync)
 {
     if(!Socket -> IsConnected())
     {
@@ -170,7 +170,7 @@ void GamaClient::pause(int64 socket_id, int32 exp_id)
     Socket -> Send(pause_command);
 }
 
-void GamaClient::step(int64 socket_id, int32 exp_id, int32 steps = 1, bool sync = false)
+void GamaClient::step(int64 socket_id, int32 exp_id, int32 steps, bool sync)
 {
     if(!Socket -> IsConnected())
     {
@@ -189,7 +189,7 @@ void GamaClient::step(int64 socket_id, int32 exp_id, int32 steps = 1, bool sync 
     Socket -> Send(step_command);
 }
 
-void GamaClient::stepBack(int64 socket_id, int32 exp_id, int32 steps = 1, bool sync = false)
+void GamaClient::stepBack(int64 socket_id, int32 exp_id, int32 steps, bool sync)
 {
     if(!Socket -> IsConnected())
     {
@@ -225,7 +225,7 @@ void GamaClient::stop(int64 socket_id, int32 exp_id)
     Socket -> Send(stop_command);
 }
 
-void GamaClient::reload(int64 socket_id, int32 exp_id, TArray<ExpParameter*> parameters = [], FString end_condition = "")
+void GamaClient::reload(int64 socket_id, int32 exp_id, TArray<ExpParameter*> parameters, FString end_condition)
 {
     if(!Socket -> IsConnected())
     {
