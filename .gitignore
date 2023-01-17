@@ -74,3 +74,8 @@
 
 # Cache files for the editor to use
 */DerivedDataCache/*
+*/Content/StarterContent
+*/.idea
+*/Plugins/Developer/RiderLink
+GamaUE5Interaction/Platforms/HoloLens/Config/HoloLensEngine.ini
+GamaUE5Interaction/GamaUE5Interaction.sln.DotSettings.user

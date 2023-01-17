@@ -2,8 +2,6 @@
 
 
 #include "GamaActionsMessageHandler.h"
-#include "jsoncpp/json/value.h"
-#include "jsoncpp/json/json.h"
 
 GamaActionsMessageHandler::GamaActionsMessageHandler()
 {

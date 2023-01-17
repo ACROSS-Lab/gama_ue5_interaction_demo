@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "MessageHandler.h"
-#include "jsoncpp/json/value.h"
-#include "jsoncpp/json/json.h"
 
 /**
  * 

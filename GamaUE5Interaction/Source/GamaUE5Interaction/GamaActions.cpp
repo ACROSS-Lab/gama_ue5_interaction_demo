@@ -4,9 +4,8 @@
 #include "GamaActions.h"
 #include "GamaClient.h"
 #include <iostream>
-#include "Json.h"
-#include "MessageHandler.h"
 #include "ExpParameter.h"
+#include "GamaActionsMessageHandler.h"
 
 
 // Sets default values
@@ -16,7 +15,6 @@ AGamaActions::AGamaActions()
 	PrimaryActorTick.bCanEverTick = true;
 	message_handler = new GamaActionsMessageHandler();
 	client = new GamaClient("localhost", 6868, message_handler);
-
 }
 
 // Called when the game starts or when spawned

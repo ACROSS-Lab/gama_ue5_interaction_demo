@@ -4,15 +4,11 @@
 #include "GamaClient.h"
 #include "WebSocketsModule.h"
 #include "IWebSocket.h"
-#include "Json.h"
-#include "jsoncpp/json/value.h"
-#include "jsoncpp/json/json.h"
-#include "Runtime/Online/HTTP/Public/Http.h"
 #include "Serialization/JsonSerializer.h"
 #include "Containers/Array.h"
 #include "MessageHandler.h"
 #include "ExpParameter.h"
-
+#include <string>
 
 GamaClient::GamaClient()
 {
@@ -20,10 +16,20 @@ GamaClient::GamaClient()
 
 GamaClient::GamaClient(FString url, int32 port, MessageHandler* message_handler) 
 {
+
+    // Making sure that modules are loaded before using them
+    if (!FModuleManager::Get().IsModuleLoaded("Websockets"))
+    {
+        FModuleManager::Get().LoadModule("WebSockets");
+    }
+    if (!FModuleManager::Get().IsModuleLoaded("Json"))
+    {
+        FModuleManager::Get().LoadModule("Json");
+    }
+    
     this -> message_handler = message_handler;
     const FString ServerURL = FString("ws://") + url + FString(":") + FString(std::to_string(port).c_str()); // Your server URL. You can use ws, wss or wss+insecure.
-    const FString ServerProtocol = FString("ws");              // The WebServer protocol you want to use.
-        
+    const FString ServerProtocol = FString("ws");              // The WebServer protocol you want to use
     Socket = FWebSocketsModule::Get().CreateWebSocket(ServerURL, ServerProtocol);
 }
 
