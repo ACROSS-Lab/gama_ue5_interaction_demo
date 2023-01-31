@@ -30,7 +30,7 @@ int32 ABuilding::GetID()
 	return id;
 }
 
-void ABuilding::SetID(int ID)
+void ABuilding::SetID(int32 ID)
 {
 	id = ID;
 }
@@ -45,7 +45,7 @@ int32 ABuilding::GetY()
 	return y_position;
 }
 
-void ABuilding::SetPosition(int x, int y)
+void ABuilding::SetPosition(int32 x, int32 y)
 {
 	x_position = x;
 	y_position = y;
