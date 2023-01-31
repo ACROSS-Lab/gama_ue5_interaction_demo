@@ -33,14 +33,14 @@ void AGamaActions::Tick(float DeltaTime)
 		FString current_path = FPaths::ProjectDir();
 		FString url = IFileManager::Get().ConvertToAbsolutePathForExternalAppForRead( *(current_path + "../MobilityModel/models/Grid Model.gaml"));
 		FString model = "grid_model";
-		client -> load(message_handler -> GetSocketId(), url, model, true, false, false);
+		client -> load(message_handler -> GetSocketId(), url, model);
 		first = false;
 	}
 
 	// play command
 	if(!played && message_handler -> GetExpId() > 0)
 	{
-		client -> play(message_handler -> GetSocketId(), message_handler -> GetExpId(), false);
+		client -> play(message_handler -> GetSocketId(), message_handler -> GetExpId());
 		played = true;
 	}
 
