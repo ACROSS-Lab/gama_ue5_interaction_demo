@@ -30,12 +30,10 @@ void AGamaActions::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (first && message_handler -> GetSocketId() > 0)
 	{
-		FString url = "/home/across/Documents/Gama_Workspace/UnrealTest/models/UnrealTest.gaml";
-		FString model = "prey_predator";
-		ExpParameter* parameter1 = new ExpParameter("int", "10", "Initial number of preys: ");
-		TArray<ExpParameter*> params;
-		params.Add(parameter1);
-		client -> load(message_handler -> GetSocketId(), url, model, true, false, false, params, "length(prey) < 10");
+		FString current_path = FPaths::ProjectDir();
+		FString url = IFileManager::Get().ConvertToAbsolutePathForExternalAppForRead( *(current_path + "../MobilityModel/models/Grid Model.gaml"));
+		FString model = "grid_model";
+		client -> load(message_handler -> GetSocketId(), url, model, true, false, false);
 		first = false;
 	}
 
@@ -44,7 +42,6 @@ void AGamaActions::Tick(float DeltaTime)
 	{
 		client -> play(message_handler -> GetSocketId(), message_handler -> GetExpId(), false);
 		played = true;
-
 	}
 
 	// step/stepBack command

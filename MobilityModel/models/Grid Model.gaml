@@ -9,7 +9,13 @@
 model GridModel
 
 /* Insert your model definition here */
-global{
+global skills:[network]{
+	
+	//UE connection variables
+	int port <- 80000;
+	
+	
+	
 	list available_office <- [];
 	graph road_network;
 	map<road,float> new_weights;
@@ -24,6 +30,8 @@ global{
 	}
 
 	action send_init_data {
+		// initialize server
+		do connect protocol:"tcp_server" port:port;
 		
 	}
 	reflex write_info{
