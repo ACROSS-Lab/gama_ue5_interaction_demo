@@ -10,9 +10,17 @@
  */
 class GAMAUE5INTERACTION_API GamaActionsMessageHandler: public MessageHandler
 {
+
+protected:
+
+	bool playing;
+	
 public:
 	GamaActionsMessageHandler();
 	void HandleConnectionSuccessful(TSharedPtr<FJsonObject> MyJson);
 	void HandleCommandExecutedSuccessfully(TSharedPtr<FJsonObject> MyJson);
+
+	bool IsPlaying();
+	
 	~GamaActionsMessageHandler();
 };

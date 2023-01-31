@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GamaClient.h"
 #include "GamaActionsMessageHandler.h"
+#include "Common/TcpSocketBuilder.h"
 
 #include "GamaActions.generated.h"
 
@@ -13,10 +14,25 @@ UCLASS()
 class GAMAUE5INTERACTION_API AGamaActions : public AActor
 {
 	GENERATED_BODY()
+	
+	// Connection constants
+	const FString GAMA_URL		= "localhost";
+	const FString GAMA_IP		= "127.0.0.1";
+	const int GAMA_SERVER_PORT	= 6868;
+	const uint16 TCP_PORT		= 8000;
+
+	//Gama server handling
 	GamaClient* client;
+	GamaActionsMessageHandler* message_handler;
+
+	// TCP handling
+	FSocket* TcpSocket;
+	
+	// Game logic
 	bool first = true;
 	bool played = false;
-	GamaActionsMessageHandler* message_handler;
+	bool tcp_connected = false;
+
 	
 public:	
 	// Sets default values for this actor's properties

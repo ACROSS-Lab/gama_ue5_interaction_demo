@@ -111,6 +111,7 @@ void GamaClient::load(int64 socket_id, FString file_path, FString experiment_nam
     if (!Socket->IsConnected())
     {
         // Don't send if we're not connected.
+        UE_LOG(LogTemp, Display, TEXT("Cannot load, not connected"));
         return;
     }
 
@@ -124,7 +125,7 @@ void GamaClient::load(int64 socket_id, FString file_path, FString experiment_nam
 
     params += FString("]");
 
-    FString load_command = FString("    \
+    FString load_command = FString("\
     {\
         \"type\": \"load\",\
         \"socket_id\": \"") + FString(std::to_string(socket_id).c_str()) + FString("\",\
