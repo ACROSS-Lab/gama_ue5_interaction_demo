@@ -28,4 +28,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	// get and set building parameters
+	virtual int32 GetID();
+	virtual void SetID(int ID);
+	virtual int32 GetX();
+	virtual int32 GetY();
+	virtual void SetPosition(int x, int y);
 };
