@@ -31,4 +31,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
+	// get and set people parameters
+	int32 GetID();
+	void SetID(int32 ID);
+	int32 GetX();
+	int32 GetY();
+	void SetPosition(int32 x, int32 y);
 };
