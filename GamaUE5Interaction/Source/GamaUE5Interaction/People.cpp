@@ -32,3 +32,29 @@ void APeople::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+int32 APeople::GetID()
+{
+	return id;
+}
+
+void APeople::SetID(int32 ID)
+{
+	id = ID;
+}
+
+int32 APeople::GetX()
+{
+	return x_position;
+}
+
+int32 APeople::GetY()
+{
+	return y_position;
+}
+
+void APeople::SetPosition(int32 x, int32 y)
+{
+	x_position = x;
+	y_position = y;
+}
+

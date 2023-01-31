@@ -25,3 +25,29 @@ void ABuilding::Tick(float DeltaTime)
 
 }
 
+int32 ABuilding::GetID()
+{
+	return id;
+}
+
+void ABuilding::SetID(int32 ID)
+{
+	id = ID;
+}
+
+int32 ABuilding::GetX()
+{
+	return x_position;
+}
+
+int32 ABuilding::GetY()
+{
+	return y_position;
+}
+
+void ABuilding::SetPosition(int32 x, int32 y)
+{
+	x_position = x;
+	y_position = y;
+}
+
