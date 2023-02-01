@@ -16,6 +16,8 @@ public:
 	// Sets default values for this actor's properties
 	AEmptyBuilding();
 
+	AEmptyBuilding(int32 ID, int32 x, int32 y);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
