@@ -16,14 +16,11 @@ AHouse::AHouse()
 }
 
 AHouse::AHouse(int32 ID, int32 x, int32 y)
+	: ABuilding(ID, x, y)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Set values for attributes
-	id = ID;
-	x_position = x;
-	y_position = y;
 }
 
 // Called when the game starts or when spawned

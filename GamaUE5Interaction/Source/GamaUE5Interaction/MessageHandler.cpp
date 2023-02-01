@@ -3,6 +3,7 @@
 
 #include "MessageHandler.h"
 #include "Serialization/JsonSerializer.h"
+
 MessageHandler::MessageHandler()
 {
 }
