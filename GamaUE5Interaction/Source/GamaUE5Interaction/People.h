@@ -19,7 +19,7 @@ public:
 	// Sets default values for this character's properties
 	APeople();
 
-	APeople(int32 ID, float x, float y);
+	void Init(int32 ID, float x, float y);
 
 protected:
 	// Called when the game starts or when spawned

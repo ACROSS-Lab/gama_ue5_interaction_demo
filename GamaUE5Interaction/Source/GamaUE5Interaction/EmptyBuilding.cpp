@@ -18,7 +18,7 @@ AEmptyBuilding::AEmptyBuilding()
 	SetActorLocation(position);
 }
 
-AEmptyBuilding::AEmptyBuilding(int32 ID, float x, float y)
+ void AEmptyBuilding::Init(int32 ID, float x, float y)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
