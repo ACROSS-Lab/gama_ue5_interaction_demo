@@ -11,20 +11,25 @@ APeople::APeople()
 
 	// Set default values for attributes
 	id = 0;
-	x_position = 0;
-	y_position = 0;
+	position.X = 0;
+	position.Y = 0;
+	position.Z = 0;
 
+	SetActorLocation(position);
 }
 
-APeople::APeople(int32 ID, int32 x, int32 y)
+APeople::APeople(int32 ID, float x, float y)
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Set values for attributes
 	id = ID;
-	x_position = x;
-	y_position = y;
+	position.X = x;
+	position.Y = y;
+	position.Z = 0;
+
+	SetActorLocation(position);
 }
 
 // Called when the game starts or when spawned
@@ -60,17 +65,18 @@ void APeople::SetID(int32 ID)
 
 int32 APeople::GetX()
 {
-	return x_position;
+	return position.X;
 }
 
 int32 APeople::GetY()
 {
-	return y_position;
+	return position.Y;
 }
 
 void APeople::SetPosition(int32 x, int32 y)
 {
-	x_position = x;
-	y_position = y;
+	position.X = x;
+	position.Y = y;
+	SetActorLocation(position);
 }
 

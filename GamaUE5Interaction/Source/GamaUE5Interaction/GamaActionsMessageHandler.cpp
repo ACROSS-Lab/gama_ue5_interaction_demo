@@ -6,7 +6,7 @@
 GamaActionsMessageHandler::GamaActionsMessageHandler()
 {
     // Set to true if you are already running an experiment (and don't need gama server to load/play it)
-    playing = false; 
+    playing = true; 
 }
 
 void GamaActionsMessageHandler::HandleConnectionSuccessful(TSharedPtr<FJsonObject> MyJson)

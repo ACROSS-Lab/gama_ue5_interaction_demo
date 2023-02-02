@@ -5,6 +5,7 @@
 #include "GamaClient.h"
 #include <iostream>
 #include "ExpParameter.h"
+#include "ObjectHandler.h"
 #include "GamaActionsMessageHandler.h"
 #include "Common/TcpSocketBuilder.h"
 #include "Interfaces/IPv4/IPv4Address.h"
@@ -84,9 +85,24 @@ void AGamaActions::Tick(float DeltaTime)
 			{
 				DataChunk[BufferSize] = '\0'; // Hack
 				FString message = UTF8_TO_TCHAR(DataChunk);
+
+				UE_LOG(LogTemp, Display, TEXT("%s"), *message);
+
+				TSharedPtr<FJsonObject> MyJson;
+
+				TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(*message);
+
+				if (FJsonSerializer::Deserialize(Reader, MyJson))
+				{
+					// The deserialization failed, handle this case
+					// UE_LOG(LogTemp, Display, TEXT("Unable to deserialize"))
+					ObjectHandler* obj = new ObjectHandler();
+					obj->HandleObject(MyJson);
+				}
+
+				
 				// Cleaning the message from everything after the final \n
 				//message.RemoveFromEnd("\n");
-				UE_LOG(LogTemp, Display, TEXT("%s"), *message);
 			}
 			delete[] DataChunk;
 		}

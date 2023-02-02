@@ -13,14 +13,13 @@ class GAMAUE5INTERACTION_API APeople : public ACharacter
 
 private:
 	int32 id;
-	int32 x_position;
-	int32 y_position;
+	FVector position;
 
 public:
 	// Sets default values for this character's properties
 	APeople();
 
-	APeople(int32 ID, int32 x, int32 y);
+	APeople(int32 ID, float x, float y);
 
 protected:
 	// Called when the game starts or when spawned

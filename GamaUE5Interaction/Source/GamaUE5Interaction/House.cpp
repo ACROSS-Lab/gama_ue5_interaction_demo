@@ -11,19 +11,25 @@ AHouse::AHouse()
 
 	// Set default values for attributes
 	id = 0;
-	x_position = 0;
-	y_position = 0;
+	position.X = 0;
+	position.Y = 0;
+	position.Z = 0;
+
+	SetActorLocation(position);
 }
 
-AHouse::AHouse(int32 ID, int32 x, int32 y)
+AHouse::AHouse(int32 ID, float x, float y)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Set values for attributes
 	id = ID;
-	x_position = x;
-	y_position = y;
+	position.X = x;
+	position.Y = y;
+	position.Z = 0;
+
+	SetActorLocation(position);
 }
 
 // Called when the game starts or when spawned

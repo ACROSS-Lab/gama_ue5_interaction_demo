@@ -12,9 +12,9 @@ class GAMAUE5INTERACTION_API ARoad : public AActor
 	GENERATED_BODY()
 
 private:
-	int32 x_position;
-	int32 y_position;
-	int32 length;
+	float x_position;
+	float y_position;
+	float length;
 
 public:	
 	// Sets default values for this actor's properties

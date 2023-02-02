@@ -16,7 +16,7 @@ public:
 	// Sets default values for this actor's properties
 	AEmptyBuilding();
 
-	AEmptyBuilding(int32 ID, int32 x, int32 y);
+	AEmptyBuilding(int32 ID, float x, float y);
 
 protected:
 	// Called when the game starts or when spawned

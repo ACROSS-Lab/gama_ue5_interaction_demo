@@ -16,7 +16,7 @@ public:
 	// Sets default values for this actor's properties
 	AOffice();
 
-	AOffice(int32 ID, int32 x, int32 y);
+	AOffice(int32 ID, float x, float y);
 
 protected:
 	// Called when the game starts or when spawned

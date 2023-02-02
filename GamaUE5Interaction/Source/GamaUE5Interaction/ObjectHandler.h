@@ -13,7 +13,7 @@ class GAMAUE5INTERACTION_API ObjectHandler
 public:
 	ObjectHandler();
 	void HandleObject(TSharedPtr<FJsonObject> MyJson);
-	virtual void HandleBuidling(TSharedPtr<FJsonObject> Info) = 0;
-	virtual void HandlePeople(TSharedPtr<FJsonObject> Info) = 0;
+	void HandleBuidling(const TArray<TSharedPtr<FJsonValue>>*&Info);
+	void HandlePeople(const TArray<TSharedPtr<FJsonValue>>*&Info);
 	~ObjectHandler();
 };
