@@ -29,6 +29,7 @@ void AGamaActions::BeginPlay()
 	message_handler = new GamaActionsMessageHandler();
 	client = new GamaClient(GAMA_URL, GAMA_SERVER_PORT, message_handler);
 	client -> connect();
+	ObjHandler = new ObjectHandler();
 }
 
 // Called every frame
@@ -96,8 +97,7 @@ void AGamaActions::Tick(float DeltaTime)
 				{
 					// The deserialization failed, handle this case
 					// UE_LOG(LogTemp, Display, TEXT("Unable to deserialize"))
-					ObjectHandler* obj = new ObjectHandler();
-					obj->HandleObject(MyJson, GetWorld());
+					ObjHandler->HandleObject(MyJson, GetWorld());
 				}
 
 				

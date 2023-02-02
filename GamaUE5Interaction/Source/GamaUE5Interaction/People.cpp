@@ -20,14 +20,11 @@ APeople::APeople()
 
 void APeople::Init(int32 ID, float x, float y)
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	// Set values for attributes
 	id = ID;
 	position.X = x;
 	position.Y = y;
-	position.Z = 0;
+//	position.Z = 0;
 
 	SetActorLocation(position);
 }

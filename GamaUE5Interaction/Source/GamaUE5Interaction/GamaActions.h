@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GamaClient.h"
 #include "GamaActionsMessageHandler.h"
-#include "Common/TcpSocketBuilder.h"
+#include "ObjectHandler.h"
 
 #include "GamaActions.generated.h"
 
@@ -27,6 +27,7 @@ class GAMAUE5INTERACTION_API AGamaActions : public AActor
 
 	// TCP handling
 	FSocket* TcpSocket;
+	ObjectHandler* ObjHandler;
 	
 	// Game logic
 	bool first = true;

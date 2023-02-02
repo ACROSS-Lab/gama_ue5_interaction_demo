@@ -28,60 +28,50 @@ void ObjectHandler::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* Current
 
 	if (MyJson->TryGetArrayField("building", BuildingInfo))
 	{
-
 		HandleBuidling(BuildingInfo, CurrentWorld);
-		delete BuildingInfo;
 	}
 
 	if (MyJson->TryGetArrayField("people", PeopleInfo))
 	{
 		HandlePeople(PeopleInfo, CurrentWorld);
-		delete PeopleInfo;
 	}
-
 }
 void ObjectHandler::HandleBuidling(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld)
 {
 	for (int i = 0; i < Info->Num(); i++)
 	{
-		try
+		TSharedPtr<FJsonObject> obj = (*Info)[i]->AsObject();
+		if (obj != NULL)
 		{
-			TSharedPtr<FJsonObject> obj = (*Info)[i]->AsObject();
-			if (obj != NULL)
+			int32 ID = obj->GetIntegerField("id");
+
+			FString type = obj->GetStringField("type");
+
+			const TSharedPtr<FJsonObject>* Location;
+
+			if (obj->TryGetObjectField("location", Location))
 			{
-				int32 ID = obj->GetIntegerField("id");
+				double x = (*Location)->GetNumberField("x");
+				double y = (*Location)->GetNumberField("y");
 
-				FString type = obj->GetStringField("type");
-
-				const TSharedPtr<FJsonObject>* Location;
-
-				if (obj->TryGetObjectField("location", Location))
+				if (type == "house")
 				{
-					int32 x = (*Location)->GetNumberField("x");
-					int32 y = (*Location)->GetNumberField("y");
+					const FVector* Loc = new FVector(x,y, 10.0);
+					AHouse* house  = (AHouse*) CurrentWorld->SpawnActor(AHouse::StaticClass(),Loc );
+					house->Init(ID, x, y);
 
-					if (type == "house")
-					{
-						AHouse* house  = (AHouse*) CurrentWorld->SpawnActor(AHouse::StaticClass());
-						house->Init(ID, x, y);
-
-					}
-					if (type == "empty")
-					{
-						AEmptyBuilding* empty = (AEmptyBuilding*) CurrentWorld->SpawnActor(AEmptyBuilding::StaticClass());
-						empty->Init(ID, x, y);
-					}
-					if (type == "office")
-					{
-						AOffice* office = (AOffice*) CurrentWorld->SpawnActor(AOffice::StaticClass());
-						office->Init(ID, x, y);
-					}
+				}
+				if (type == "empty")
+				{
+					AEmptyBuilding* empty = (AEmptyBuilding*) CurrentWorld->SpawnActor(AEmptyBuilding::StaticClass());
+					empty->Init(ID, x, y);
+				}
+				if (type == "office")
+				{
+					AOffice* office = (AOffice*) CurrentWorld->SpawnActor(AOffice::StaticClass());
+					office->Init(ID, x, y);
 				}
 			}
-		}
-		catch (...)
-		{
-
 		}
 	}
 }
@@ -90,30 +80,25 @@ void ObjectHandler::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UW
 {
 	for (int i = 0; i < Info->Num(); i++)
 	{
-		try
+		TSharedPtr<FJsonObject> obj = (*Info)[i]->AsObject();
+		if (obj != NULL)
 		{
-			TSharedPtr<FJsonObject> obj = (*Info)[i]->AsObject();
-			if (obj != NULL)
+			int32 ID = obj->GetIntegerField("id");
+
+			const TSharedPtr<FJsonObject>* Location;
+
+			if (obj->TryGetObjectField("location", Location))
 			{
-				int32 ID = obj->GetIntegerField("id");
+				double x = (*Location)->GetNumberField("x");
+				double y = (*Location)->GetNumberField("y");
 
-				FString type = obj->GetStringField("type");
-
-				const TSharedPtr<FJsonObject>* Location;
-
-				if (obj->TryGetObjectField("location", Location))
+				const FVector* Loc = new FVector(x,y, 0.0);
+				APeople* people = (APeople*)CurrentWorld->SpawnActor(APeople::StaticClass(), Loc);
+				if(people != nullptr)
 				{
-					int32 x = (*Location)->GetNumberField("x");
-					int32 y = (*Location)->GetNumberField("y");
-
-					APeople* people = (APeople*)CurrentWorld->SpawnActor(APeople::StaticClass());
 					people->Init(ID, x, y);
 				}
 			}
-		}
-		catch (...)
-		{
-
 		}
 	}
 }
