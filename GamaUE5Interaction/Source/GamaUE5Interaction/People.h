@@ -14,6 +14,8 @@ class GAMAUE5INTERACTION_API APeople : public ACharacter
 private:
 	int32 id;
 	FVector position;
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* StaticMesh; //Graphical representation
 
 public:
 	// Sets default values for this character's properties

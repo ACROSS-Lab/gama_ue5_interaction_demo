@@ -15,7 +15,16 @@ APeople::APeople()
 	position.Y = 0;
 	position.Z = 0;
 
-	SetActorLocation(position);
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+
+	// Load the sphere
+	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Sphere.Sphere'")).Object;
+	
+	StaticMesh->SetStaticMesh(sphereMesh);
+	StaticMesh->SetMobility(EComponentMobility::Movable);
+	//StaticMesh->SetMaterial()
+	RootComponent = StaticMesh;
+	
 }
 
 void APeople::Init(int32 ID, float x, float y)
@@ -40,7 +49,6 @@ void APeople::BeginPlay()
 void APeople::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input

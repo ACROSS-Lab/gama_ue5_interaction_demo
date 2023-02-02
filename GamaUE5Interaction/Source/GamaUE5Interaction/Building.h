@@ -16,6 +16,7 @@ protected:
 	FVector position;
 	//float x_position;
 	//float y_position;
+	UStaticMeshComponent* StaticMesh;
 
 public:	
 	// Sets default values for this actor's properties
