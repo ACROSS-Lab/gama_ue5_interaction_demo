@@ -15,7 +15,9 @@
 
 ObjectHandler::ObjectHandler()
 {
-	building_ids = {};
+	house_ids = {};
+	empty_ids = {};
+	office_ids = {};
 	people_ids = {};
 }
 
@@ -57,39 +59,39 @@ void ObjectHandler::HandleBuidling(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 
 			const TSharedPtr<FJsonObject>* Location;
 
-			if (obj->TryGetObjectField("location", Location) && !id_found(ID, building_ids))
+			if (obj->TryGetObjectField("location", Location))
 			{
 				double x = (*Location)->GetNumberField("x");
 				double y = (*Location)->GetNumberField("y");
 
 				const FVector* Loc = new FVector(x, y, 10.0);
 
-				if (type == "house")
+				if (type == "house" && !id_found(ID, house_ids))
 				{
 					//const FVector* Loc = new FVector(x,y, 10.0);
 					AHouse* house  = (AHouse*) CurrentWorld->SpawnActor(AHouse::StaticClass(), Loc);
 					if (house != NULL)
 					{
 						house->Init(ID, x, y);
-						building_ids.Add(ID);
+						house_ids.Add(ID);
 					}
 				}
-				if (type == "empty")
+				if (type == "empty" && !id_found(ID, empty_ids))
 				{
 					AEmptyBuilding* empty = (AEmptyBuilding*) CurrentWorld->SpawnActor(AEmptyBuilding::StaticClass(), Loc);
 					if (empty != NULL)
 					{
 						empty->Init(ID, x, y);
-						building_ids.Add(ID);
+						empty_ids.Add(ID);
 					}
 				}
-				if (type == "office")
+				if (type == "office" && !id_found(ID, office_ids))
 				{
 					AOffice* office = (AOffice*) CurrentWorld->SpawnActor(AOffice::StaticClass(), Loc);
 					if (office != NULL)
 					{
 						office->Init(ID, x, y);
-						building_ids.Add(ID);
+						office_ids.Add(ID);
 					}
 				}
 			}
