@@ -11,9 +11,17 @@
 #include "Serialization/JsonSerializer.h"
 #include "Containers/Array.h"
 #include "Engine/World.h"
+#include "Containers/Array.h"
 
 ObjectHandler::ObjectHandler()
 {
+	building_ids = {};
+	people_ids = {};
+}
+
+bool ObjectHandler::id_found(int32 ID, TArray<int32> ids)
+{
+	return ids.Find(ID) >= 0;
 }
 
 
@@ -49,27 +57,40 @@ void ObjectHandler::HandleBuidling(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 
 			const TSharedPtr<FJsonObject>* Location;
 
-			if (obj->TryGetObjectField("location", Location))
+			if (obj->TryGetObjectField("location", Location) && !id_found(ID, building_ids))
 			{
 				double x = (*Location)->GetNumberField("x");
 				double y = (*Location)->GetNumberField("y");
 
+				const FVector* Loc = new FVector(x, y, 10.0);
+
 				if (type == "house")
 				{
-					const FVector* Loc = new FVector(x,y, 10.0);
-					AHouse* house  = (AHouse*) CurrentWorld->SpawnActor(AHouse::StaticClass(),Loc );
-					house->Init(ID, x, y);
-
+					//const FVector* Loc = new FVector(x,y, 10.0);
+					AHouse* house  = (AHouse*) CurrentWorld->SpawnActor(AHouse::StaticClass(), Loc);
+					if (house != NULL)
+					{
+						house->Init(ID, x, y);
+						building_ids.Add(ID);
+					}
 				}
 				if (type == "empty")
 				{
-					AEmptyBuilding* empty = (AEmptyBuilding*) CurrentWorld->SpawnActor(AEmptyBuilding::StaticClass());
-					empty->Init(ID, x, y);
+					AEmptyBuilding* empty = (AEmptyBuilding*) CurrentWorld->SpawnActor(AEmptyBuilding::StaticClass(), Loc);
+					if (empty != NULL)
+					{
+						empty->Init(ID, x, y);
+						building_ids.Add(ID);
+					}
 				}
 				if (type == "office")
 				{
-					AOffice* office = (AOffice*) CurrentWorld->SpawnActor(AOffice::StaticClass());
-					office->Init(ID, x, y);
+					AOffice* office = (AOffice*) CurrentWorld->SpawnActor(AOffice::StaticClass(), Loc);
+					if (office != NULL)
+					{
+						office->Init(ID, x, y);
+						building_ids.Add(ID);
+					}
 				}
 			}
 		}
@@ -87,7 +108,7 @@ void ObjectHandler::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UW
 
 			const TSharedPtr<FJsonObject>* Location;
 
-			if (obj->TryGetObjectField("location", Location))
+			if (obj->TryGetObjectField("location", Location) && !id_found(ID, people_ids))
 			{
 				double x = (*Location)->GetNumberField("x");
 				double y = (*Location)->GetNumberField("y");
@@ -97,6 +118,7 @@ void ObjectHandler::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UW
 				if(people != nullptr)
 				{
 					people->Init(ID, x, y);
+					people_ids.Add(ID);
 				}
 			}
 		}

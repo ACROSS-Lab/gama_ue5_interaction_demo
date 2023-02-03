@@ -4,14 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Dom/JsonObject.h"
+#include "Containers/Array.h"
 
 /**
  * 
  */
 class GAMAUE5INTERACTION_API ObjectHandler
 {
+private:
+	TArray<int32> building_ids;
+	TArray<int32> people_ids;
 public:
 	ObjectHandler();
+
+	bool id_found(int32 ID, TArray<int32> ids);
 
 	void HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* CurrentWorld);
 	void HandleBuidling(const TArray<TSharedPtr<FJsonValue>>*&Info, UWorld* CurrentWorld);
