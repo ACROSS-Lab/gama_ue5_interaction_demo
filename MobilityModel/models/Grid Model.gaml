@@ -29,6 +29,18 @@ global skills:[network]{
 	init{	
 		create road from: split_lines(union(environment collect each.shape.contour));	
 		road_network <- as_edge_graph(road);
+		
+		//initialize with empty buildings everywhere
+		loop i from:0 to:7 {
+			loop j from:0 to:7 {
+				let ev <- environment[i,j];
+				create empty_building {
+					location <- ev.location;
+					shape <- ev.shape;
+				}
+			}	
+		}
+		
 		//do send_init_data;
 	}
 
@@ -155,19 +167,20 @@ global skills:[network]{
 		environment selected_cell <- first(environment overlapping (#user_location));
 		//write selected_cell;
 		if selected_cell != nil{
+			//If there was nothing we create a house and it's inhabitants
 			if(house overlapping (#user_location) = [] and office overlapping (#user_location) = []){
 				create house{
-				location <- selected_cell.location;
-				color <- #blue;
-				shape <- selected_cell.shape;
-				create inhabitant number: 20{
+					location <- selected_cell.location;
+//					color <- #blue;
+					shape <- selected_cell.shape;
+					create inhabitant number: 20{
 						location <- any_location_in((selected_cell).shape);
 						house_location <- location;
 						office_location <- not empty(available_office) ? any_location_in(one_of(available_office)) : nil;
 					}				
 				}
 			}
-			
+			// If there was already a house, we create an office
 			else if(house overlapping (#user_location) != []){
 				ask house overlapping (#user_location) {
 					//kill inhabitant belonging to that house
@@ -179,22 +192,30 @@ global skills:[network]{
 						}				
 					}
 					create office{
-						color <- #orange;
+//						color <- #orange;
 						location <- myself.location;
 						shape <- myself.shape;	
 					}		
-				do die;
+					do die;
 				}
 			}
-			
 			else {
+				//If there was an office we replace with an empty building
 				ask office overlapping (#user_location){
-					ask inhabitant inside(self){
-						location <- not empty(available_office) ? any_location_in(one_of(available_office)) : house_location;
+
+					create empty_building {
+						location <- myself.location;
+						shape <- myself.shape;	
+					}
+
+					ask inhabitant where (each.office_location = location){
+						office_location <- not empty(available_office) ? any_location_in(one_of(available_office)) : nil;
 					}
 					available_office >> self;
 					do die;
-				}			
+				}	
+				
+	
 //				write ('number of available office after kill one: ' + length(available_office));
 			}	
 		}
@@ -248,23 +269,28 @@ species road{
 	}
 }
 
-species empty_building{
-	rgb color;
-	string type <- "empty";
-	aspect default{
-		draw shape color:color;
-	}
-	
+species building {
+	string type <- "default";
 	map to_json {
 		return map("id":: int(self), "type":: type, "location":: map('x'::location.x, 'y'::location.y));
 	}
 }
 
-species house parent:empty_building{
+species empty_building parent:building{
+	
+	rgb color <- #grey;
+	string type <- "empty";
+	
+
+}
+
+species house parent:building{
+	rgb color <- #blue;
 	string type <- "house";
 }
 
-species office parent:empty_building{
+species office parent:building{
+	rgb color <- #orange;
 	string type <- "office";
 }
 
@@ -281,10 +307,10 @@ experiment grid_model type:gui{
 		
 		display main_display type:opengl axes:false{
 			//grid environment border: #black;
-			species empty_building aspect: default;
+			species empty_building;
 			species road aspect: default;
-			species house aspect: default;
-			species office aspect: default;
+			species house;
+			species office;
 			species inhabitant aspect: default;
 			event mouse_down action:mouse_click;
 		}	
