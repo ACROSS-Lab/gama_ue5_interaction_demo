@@ -14,7 +14,6 @@ global skills:[network]{
 	//UE connection variables
 	int port <- 8000;
 	unknown ue_client;
-	float last_duration <- 0;
 	bool initialized <- false;
 	
 	
@@ -107,7 +106,6 @@ global skills:[network]{
 		else {
 			do send_world;			
 		}
-		last_duration <- total_duration;
 	}
 
 
@@ -171,13 +169,15 @@ global skills:[network]{
 			if(house overlapping (#user_location) = [] and office overlapping (#user_location) = []){
 				create house{
 					location <- selected_cell.location;
-//					color <- #blue;
 					shape <- selected_cell.shape;
 					create inhabitant number: 20{
 						location <- any_location_in((selected_cell).shape);
 						house_location <- location;
 						office_location <- not empty(available_office) ? any_location_in(one_of(available_office)) : nil;
 					}				
+				}
+				ask empty_building overlapping (#user_location) {
+					do die;
 				}
 			}
 			// If there was already a house, we create an office
