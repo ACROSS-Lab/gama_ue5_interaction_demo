@@ -110,6 +110,18 @@ void AGamaActions::Tick(float DeltaTime)
 		{
 			// Unable to read for some reason
 		}
+
+		// Randomly picks a house and turns it into an office
+		if (ObjHandler->house_ids.Num() > 0 && FMath::FRand() > 0.99)
+		{
+			auto idx = FMath::RandRange(0, ObjHandler->house_ids.Num()-1);
+			int id = ObjHandler->house_ids[idx];
+			// Sends a message to gama to confirm it's connected
+			FString change_msg = FString("{ \"type\": \"house\", \"id\": ") + FString::FromInt(id) + FString("}\n");
+			int32 BytesSent;
+			TcpSocket -> Send((const uint8*)  TCHAR_TO_ANSI(*change_msg), change_msg.Len(), BytesSent);
+		}
+		
 	}
 	// step/stepBack command
 	// expression command

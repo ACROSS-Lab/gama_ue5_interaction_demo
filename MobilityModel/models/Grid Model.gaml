@@ -39,8 +39,6 @@ global skills:[network]{
 				}
 			}	
 		}
-		
-		//do send_init_data;
 	}
 
 	action send_init_data {
@@ -64,7 +62,6 @@ global skills:[network]{
 	}
 	
 	action send_world {
-		
 		
 		map to_send;
 		let buildings <- [];
@@ -96,7 +93,7 @@ global skills:[network]{
 		
 	}
 
-	reflex update_ue 
+	reflex send_update_to_ue 
 	{
 		
 		if ! initialized {
@@ -108,6 +105,26 @@ global skills:[network]{
 		}
 	}
 
+
+	reflex read_ue_messages when:has_more_message() {
+	  loop while: has_more_message() {
+	        message s <- fetch_message();
+	        write "cycle: " + cycle + " received from client: " + s.contents;
+	    	ue_client <- s.sender; // updates the client
+	    	if s.contents != "connected" {
+	    		let answer <- map(s.contents);
+	    		if answer["type"] = "house" and house(int(answer["id"])) != nil {
+	    			do change_house_to_office(house(int(answer["id"])));
+	    		}
+	    		else if answer["type"] = "office" and office(int(answer["id"])) != nil {
+	    			do change_office_to_empty_building(office(int(answer["id"])));
+	    		}
+	    		else if answer["type"] = "empty" and empty_building(int(answer["id"])) != nil {
+	    			do change_empty_building_to_house(empty_building(int(answer["id"])));
+	    		}
+	    	}
+	    }	
+	}
 
 	//when a road is busy, it turns into yellow & inhabitant's speed decreases
 	reflex update_road{
@@ -157,8 +174,54 @@ global skills:[network]{
 		}
 	}
 	
-	reflex send_update_data {
+	action change_house_to_office(house old_house) {
+		//kill inhabitant belonging to that house
+		loop i over: inhabitant{
+			if (old_house overlaps i.house_location){
+				ask i{
+					do die;
+				}
+			}				
+		}
+		create office{
+			location <- old_house.location;
+			shape <- old_house.shape;	
+		}
+		ask old_house{
+			do die;			
+		}		
+	}
+	
+	action change_office_to_empty_building(office old_office) {
 		
+		create empty_building {
+			location <- old_office.location;
+			shape <- old_office.shape;	
+		}
+
+		available_office >> old_office;
+
+		ask inhabitant where (each.office_location = old_office.location){
+			office_location <- not empty(available_office) ? any_location_in(one_of(available_office)) : nil;
+		}
+		ask old_office{
+			do die;
+		}
+	}
+	
+	action change_empty_building_to_house(empty_building old_building){
+		create house{
+			location <- old_building.location;
+			shape <- old_building.shape;
+			create inhabitant number: 20{
+				location <- any_location_in((myself).shape);
+				house_location <- location;
+				office_location <- not empty(available_office) ? any_location_in(one_of(available_office)) : nil;
+			}				
+		}
+		ask old_building {
+			do die;
+		}
 	}
 	
 	action mouse_click{
@@ -167,56 +230,27 @@ global skills:[network]{
 		if selected_cell != nil{
 			//If there was nothing we create a house and it's inhabitants
 			if(house overlapping (#user_location) = [] and office overlapping (#user_location) = []){
-				create house{
-					location <- selected_cell.location;
-					shape <- selected_cell.shape;
-					create inhabitant number: 20{
-						location <- any_location_in((selected_cell).shape);
-						house_location <- location;
-						office_location <- not empty(available_office) ? any_location_in(one_of(available_office)) : nil;
-					}				
-				}
-				ask empty_building overlapping (#user_location) {
-					do die;
+				ask empty_building overlapping #user_location {
+					ask world {
+						do change_empty_building_to_house(myself);
+					}					
 				}
 			}
 			// If there was already a house, we create an office
 			else if(house overlapping (#user_location) != []){
 				ask house overlapping (#user_location) {
-					//kill inhabitant belonging to that house
-					loop i over: inhabitant{
-						if (selected_cell overlaps i.house_location){
-							ask i{
-								do die;
-							}
-						}				
+					ask world{
+						do change_house_to_office(myself);						
 					}
-					create office{
-//						color <- #orange;
-						location <- myself.location;
-						shape <- myself.shape;	
-					}		
-					do die;
 				}
 			}
 			else {
 				//If there was an office we replace with an empty building
 				ask office overlapping (#user_location){
-
-					create empty_building {
-						location <- myself.location;
-						shape <- myself.shape;	
+					ask world {
+						do change_office_to_empty_building(myself);
 					}
-
-					ask inhabitant where (each.office_location = location){
-						office_location <- not empty(available_office) ? any_location_in(one_of(available_office)) : nil;
-					}
-					available_office >> self;
-					do die;
 				}	
-				
-	
-//				write ('number of available office after kill one: ' + length(available_office));
 			}	
 		}
 	}

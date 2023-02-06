@@ -12,11 +12,11 @@
 class GAMAUE5INTERACTION_API ObjectHandler
 {
 private:
-	TArray<int32> house_ids;
 	TArray<int32> empty_ids;
 	TArray<int32> office_ids;
 	TArray<int32> people_ids;
 public:
+	TArray<int32> house_ids;
 	ObjectHandler();
 
 	bool id_found(int32 ID, TArray<int32> ids);
