@@ -19,6 +19,20 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
+	class USpringArmComponent* SpringArmComp;
+
+	UPROPERTY(EditAnywhere)
+	class UCameraComponent* CameraComp;
+
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* StaticMeshComp;
+
+	FVector MovementInput;
+	FVector CameraInput;
+	float ZoomFactor;
+	bool bZoomingIn;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -28,7 +42,9 @@ public:
 
 	void Move_XAxis(float AxisValue);
 	void Move_YAxis(float AxisValue);
-
-	FVector CurrentVelocity;
+	void PitchCamera(float AxisValue);
+	void YawCamera(float AxisValue);
+	void ZoomIn();
+	void ZoomOut();
 	
 };
