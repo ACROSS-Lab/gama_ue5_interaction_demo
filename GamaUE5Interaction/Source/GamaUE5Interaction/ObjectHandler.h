@@ -12,17 +12,23 @@
 class GAMAUE5INTERACTION_API ObjectHandler
 {
 private:
+	TArray<int32> house_ids;
 	TArray<int32> empty_ids;
 	TArray<int32> office_ids;
 	TArray<int32> people_ids;
+	
 public:
-	TArray<int32> house_ids;
 	ObjectHandler();
 
 	bool id_found(int32 ID, TArray<int32> ids);
-
+	
+	TArray<int32> Get_House_Ids();
+	TArray<int32> Get_Empty_Ids();
+	TArray<int32> Get_Office_Ids();
+	TArray<int32> Get_People_Ids();
+	
 	void HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* CurrentWorld);
-	void HandleBuidling(const TArray<TSharedPtr<FJsonValue>>*&Info, UWorld* CurrentWorld);
+	void HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*&Info, UWorld* CurrentWorld);
 	void HandlePeople(const TArray<TSharedPtr<FJsonValue>>*&Info, UWorld* CurrentWorld);
 	~ObjectHandler();
 };

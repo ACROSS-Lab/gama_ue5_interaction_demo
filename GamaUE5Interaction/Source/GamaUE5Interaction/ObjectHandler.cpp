@@ -26,6 +26,26 @@ bool ObjectHandler::id_found(int32 ID, TArray<int32> ids)
 	return ids.Find(ID) >= 0;
 }
 
+TArray<int32> ObjectHandler::Get_House_Ids()
+{
+	return house_ids;
+}
+
+TArray<int32> ObjectHandler::Get_Empty_Ids()
+{
+	return empty_ids;
+}
+
+TArray<int32> ObjectHandler::Get_Office_Ids()
+{
+	return office_ids;
+}
+
+TArray<int32> ObjectHandler::Get_People_Ids()
+{
+	return people_ids;
+}
+
 
 void ObjectHandler::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* CurrentWorld)
 {
@@ -38,7 +58,7 @@ void ObjectHandler::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* Current
 
 	if (MyJson->TryGetArrayField("building", BuildingInfo))
 	{
-		HandleBuidling(BuildingInfo, CurrentWorld);
+		HandleBuilding(BuildingInfo, CurrentWorld);
 	}
 
 	if (MyJson->TryGetArrayField("people", PeopleInfo))
@@ -46,7 +66,7 @@ void ObjectHandler::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* Current
 		HandlePeople(PeopleInfo, CurrentWorld);
 	}
 }
-void ObjectHandler::HandleBuidling(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld)
+void ObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld)
 {
 	for (int i = 0; i < Info->Num(); i++)
 	{

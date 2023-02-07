@@ -3,7 +3,6 @@
 
 #include "GamaActions.h"
 #include "GamaClient.h"
-#include <iostream>
 #include "ExpParameter.h"
 #include "ObjectHandler.h"
 #include "GamaActionsMessageHandler.h"
@@ -112,15 +111,15 @@ void AGamaActions::Tick(float DeltaTime)
 		}
 
 		// Randomly picks a house and turns it into an office
-		if (ObjHandler->house_ids.Num() > 0 && FMath::FRand() > 0.99)
+		/*if (ObjHandler->Get_House_Ids().Num() > 0 && FMath::FRand() > 0.99)
 		{
-			auto idx = FMath::RandRange(0, ObjHandler->house_ids.Num()-1);
-			int id = ObjHandler->house_ids[idx];
+			auto idx = FMath::RandRange(0, ObjHandler->Get_House_Ids().Num()-1);
+			int id = ObjHandler->Get_House_Ids()[idx];
 			// Sends a message to gama to confirm it's connected
 			FString change_msg = FString("{ \"type\": \"house\", \"id\": ") + FString::FromInt(id) + FString("}\n");
 			int32 BytesSent;
 			TcpSocket -> Send((const uint8*)  TCHAR_TO_ANSI(*change_msg), change_msg.Len(), BytesSent);
-		}
+		}*/
 		
 	}
 	// step/stepBack command
@@ -132,5 +131,12 @@ void AGamaActions::Tick(float DeltaTime)
 	// 	// client -> stepBack(message_handler -> GetSocketId(), message_handler -> GetExpId(), 1, false);
 	// 	// client -> expression(message_handler -> GetSocketId(), message_handler -> GetExpId(), "length(predator)");
 	// }
+}
+
+void AGamaActions::SendChange(FString type, int32 ID)
+{
+	FString change_msg = FString("{ \"type\": \"") + type + FString("\", \"id\": ") + FString::FromInt(ID) + FString("}\n");
+	int32 BytesSent;
+	TcpSocket -> Send((const uint8*)  TCHAR_TO_ANSI(*change_msg), change_msg.Len(), BytesSent);
 }
 
