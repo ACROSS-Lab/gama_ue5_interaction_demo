@@ -3,7 +3,7 @@
 
 #include "ModelPlayer.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Camera/Component.h"
+#include "Camera/CameraComponent.h"
 
 
 // Sets default values
@@ -80,7 +80,7 @@ void AModelPlayer::Tick(float DeltaTime)
 		if (!MovementInput.IsZero())
 		{
 			//Scale our movement input axis values by 100 units per second
-			MovementInput = MovementInput.SafeNormal() * 100.0f;
+			MovementInput = MovementInput.GetSafeNormal() * 100.0f;
 			FVector NewLocation = GetActorLocation();
 			NewLocation += GetActorForwardVector() * MovementInput.X * DeltaTime;
 			NewLocation += GetActorRightVector() * MovementInput.Y * DeltaTime;
@@ -99,8 +99,8 @@ void AModelPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	InputComponent->BindAction("ZoomIn", IE_Released, this, &AModelPlayer::ZoomOut);
 
 	//Hook up every-frame handling for our four axes
-	InputComponent->BindAxis("MoveForward", this, &AModelPlayer::Move_XAxis);
-	InputComponent->BindAxis("MoveRight", this, &AModelPlayer::Move_YAxis);
+	InputComponent->BindAxis("VerticalMove", this, &AModelPlayer::Move_XAxis);
+	InputComponent->BindAxis("HorizontalMove", this, &AModelPlayer::Move_YAxis);
 	InputComponent->BindAxis("CameraPitch", this, &AModelPlayer::PitchCamera);
 	InputComponent->BindAxis("CameraYaw", this, &AModelPlayer::YawCamera);
 }
