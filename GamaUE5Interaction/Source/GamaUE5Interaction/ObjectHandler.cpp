@@ -187,8 +187,8 @@ void ObjectHandler::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld
 				bool destroyed_house = CurrentWorld -> DestroyActor(houses[i]);
 				if(destroyed_house)
 				{
-					houses.Remove(houses[i]);
 					house_ids.Remove(houses[i] -> GetID());
+					houses.Remove(houses[i]);
 					break;	
 				}
 			}
@@ -203,8 +203,8 @@ void ObjectHandler::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld
 				bool destroyed_empty = CurrentWorld -> DestroyActor(empty_buildings[i]);
 				if(destroyed_empty)
 				{
-					empty_buildings.Remove(empty_buildings[i]);
 					empty_ids.Remove(empty_buildings[i] -> GetID());
+					empty_buildings.Remove(empty_buildings[i]);
 					break;
 				}
 			}
@@ -219,8 +219,8 @@ void ObjectHandler::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld
 				bool destroyed_office = CurrentWorld -> DestroyActor(offices[i]);
 				if(destroyed_office)
 				{
-					offices.Remove(offices[i]);
 					office_ids.Remove(offices[i] -> GetID());
+					offices.Remove(offices[i]);
 					break;
 				}
 			}
@@ -237,8 +237,8 @@ void ObjectHandler::DestroyPeople(int32 ID, UWorld* CurrentWorld)
 			bool destroyed_people = CurrentWorld -> DestroyActor(peoples[i]);
 			if(destroyed_people)
 			{
-				peoples.Remove(peoples[i]);
 				people_ids.Remove(peoples[i] -> GetID());
+				peoples.Remove(peoples[i]);
 				break;
 			}
 		}
