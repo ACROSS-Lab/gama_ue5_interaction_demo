@@ -19,6 +19,13 @@ ObjectHandler::ObjectHandler()
 	empty_ids = {};
 	office_ids = {};
 	people_ids = {};
+
+	scaling_factor = 10;
+
+	houses = {};
+	empty_buildings = {};
+	offices = {};
+	peoples = {};
 }
 
 bool ObjectHandler::id_found(int32 ID, TArray<int32> ids)
@@ -26,33 +33,51 @@ bool ObjectHandler::id_found(int32 ID, TArray<int32> ids)
 	return ids.Find(ID) >= 0;
 }
 
-TArray<int32> ObjectHandler::Get_House_Ids()
+TArray<int32> ObjectHandler::GetHouseIds()
 {
 	return house_ids;
 }
 
-TArray<int32> ObjectHandler::Get_Empty_Ids()
+TArray<int32> ObjectHandler::GetEmptyIds()
 {
 	return empty_ids;
 }
 
-TArray<int32> ObjectHandler::Get_Office_Ids()
+TArray<int32> ObjectHandler::GetOfficeIds()
 {
 	return office_ids;
 }
 
-TArray<int32> ObjectHandler::Get_People_Ids()
+TArray<int32> ObjectHandler::GetPeopleIds()
 {
 	return people_ids;
+}
+
+TArray<AHouse*> ObjectHandler::GetHouses()
+{
+	return houses;
+}
+
+TArray<AEmptyBuilding*> ObjectHandler::GetEmptyBuildings()
+{
+	return empty_buildings;
+}
+
+TArray<AOffice*> ObjectHandler::GetOffices()
+{
+	return offices;
+}
+
+TArray<APeople*> ObjectHandler::GetPeoples()
+{
+	return peoples;
 }
 
 
 void ObjectHandler::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* CurrentWorld)
 {
 	//const TSharedPtr<FJsonObject>* Info;
-
-
-
+	
 	const TArray<TSharedPtr<FJsonValue>>* BuildingInfo;
 	const TArray<TSharedPtr<FJsonValue>>* PeopleInfo;
 
@@ -81,8 +106,8 @@ void ObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 
 			if (obj->TryGetObjectField("location", Location))
 			{
-				double x = (*Location)->GetNumberField("x");
-				double y = (*Location)->GetNumberField("y");
+				double x = (*Location)->GetNumberField("x") * scaling_factor;
+				double y = (*Location)->GetNumberField("y") * scaling_factor;
 
 				const FVector* Loc = new FVector(x, y, 10.0);
 
@@ -93,6 +118,7 @@ void ObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 					if (house != NULL)
 					{
 						house->Init(ID, x, y);
+						houses.Add(house);
 						house_ids.Add(ID);
 					}
 				}
@@ -102,6 +128,7 @@ void ObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 					if (empty != NULL)
 					{
 						empty->Init(ID, x, y);
+						empty_buildings.Add(empty);
 						empty_ids.Add(ID);
 					}
 				}
@@ -111,6 +138,7 @@ void ObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 					if (office != NULL)
 					{
 						office->Init(ID, x, y);
+						offices.Add(office);
 						office_ids.Add(ID);
 					}
 				}
@@ -132,16 +160,86 @@ void ObjectHandler::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UW
 
 			if (obj->TryGetObjectField("location", Location) && !id_found(ID, people_ids))
 			{
-				double x = (*Location)->GetNumberField("x");
-				double y = (*Location)->GetNumberField("y");
+				double x = (*Location)->GetNumberField("x") * scaling_factor;
+				double y = (*Location)->GetNumberField("y") * scaling_factor;
 
 				const FVector* Loc = new FVector(x,y, 0.0);
 				APeople* people = (APeople*)CurrentWorld->SpawnActor(APeople::StaticClass(), Loc);
 				if(people != nullptr)
 				{
 					people->Init(ID, x, y);
+					peoples.Add(people);
 					people_ids.Add(ID);
 				}
+			}
+		}
+	}
+}
+
+void ObjectHandler::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld)
+{
+	if(type == "house")
+	{
+		for(int32 i = 0; i < houses.Num(); i++)
+		{
+			if(houses[i] -> GetID() == ID)
+			{
+				bool destroyed_house = CurrentWorld -> DestroyActor(houses[i]);
+				if(destroyed_house)
+				{
+					houses.Remove(houses[i]);
+					house_ids.Remove(houses[i] -> GetID());
+					break;	
+				}
+			}
+		}
+	}
+	if(type == "empty")
+	{
+		for(int32 i = 0; i < empty_buildings.Num(); i++)
+		{
+			if(empty_buildings[i] -> GetID() == ID)
+			{
+				bool destroyed_empty = CurrentWorld -> DestroyActor(empty_buildings[i]);
+				if(destroyed_empty)
+				{
+					empty_buildings.Remove(empty_buildings[i]);
+					empty_ids.Remove(empty_buildings[i] -> GetID());
+					break;
+				}
+			}
+		}
+	}
+	if(type == "office")
+	{
+		for(int32 i = 0; i < offices.Num(); i++)
+		{
+			if(offices[i] -> GetID() == ID)
+			{
+				bool destroyed_office = CurrentWorld -> DestroyActor(offices[i]);
+				if(destroyed_office)
+				{
+					offices.Remove(offices[i]);
+					office_ids.Remove(offices[i] -> GetID());
+					break;
+				}
+			}
+		}
+	}
+}
+
+void ObjectHandler::DestroyPeople(int32 ID, UWorld* CurrentWorld)
+{
+	for(int32 i = 0; i < peoples.Num(); i++)
+	{
+		if(peoples[i] -> GetID() == ID)
+		{
+			bool destroyed_people = CurrentWorld -> DestroyActor(peoples[i]);
+			if(destroyed_people)
+			{
+				peoples.Remove(peoples[i]);
+				people_ids.Remove(peoples[i] -> GetID());
+				break;
 			}
 		}
 	}
