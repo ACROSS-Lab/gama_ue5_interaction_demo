@@ -40,5 +40,5 @@ public:
 	void SetID(int32 ID);
 	int32 GetX();
 	int32 GetY();
-	void SetPosition(int32 x, int32 y);
+	void SetPosition(float x, float y);
 };

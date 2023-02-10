@@ -78,7 +78,7 @@ int32 APeople::GetY()
 	return position.Y;
 }
 
-void APeople::SetPosition(int32 x, int32 y)
+void APeople::SetPosition(float x, float y)
 {
 	position.X = x;
 	position.Y = y;

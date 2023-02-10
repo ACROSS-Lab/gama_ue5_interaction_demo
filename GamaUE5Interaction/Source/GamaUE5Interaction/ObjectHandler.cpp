@@ -20,7 +20,7 @@ ObjectHandler::ObjectHandler()
 	office_ids = {};
 	people_ids = {};
 
-	scaling_factor = 10;
+	scaling_factor = 5;
 
 	houses = {};
 	empty_buildings = {};
@@ -73,7 +73,6 @@ TArray<APeople*> ObjectHandler::GetPeoples()
 	return peoples;
 }
 
-
 void ObjectHandler::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* CurrentWorld)
 {
 	//const TSharedPtr<FJsonObject>* Info;
@@ -91,9 +90,77 @@ void ObjectHandler::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* Current
 		HandlePeople(PeopleInfo, CurrentWorld);
 	}
 }
+
 void ObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld)
 {
-	for (int i = 0; i < Info->Num(); i++)
+	// destroy old house
+	auto tmp_houses = houses;
+	for (int32 i = 0; i < tmp_houses.Num(); i++)
+	{
+		bool present = false;
+		for (int32 j = 0; j < Info->Num(); j++)
+		{
+			TSharedPtr<FJsonObject> obj = (*Info)[j]->AsObject();
+			FString type = obj->GetStringField("type");
+			int32 ID = obj->GetIntegerField("id");
+			if (type == "house" && ID == tmp_houses[i]->GetID())
+			{
+				present = true;
+				break;
+			}
+		}
+		if (!present)
+		{
+			DestroyBuilding("house", tmp_houses[i] -> GetID(), CurrentWorld);
+		}
+	}
+
+	//destroy old empty building
+	auto tmp_empty_buildings = empty_buildings;
+	for (int32 i = 0; i < tmp_empty_buildings.Num(); i++)
+	{
+		bool present = false;
+		for (int32 j = 0; j < Info->Num(); j++)
+		{
+			TSharedPtr<FJsonObject> obj = (*Info)[j]->AsObject();
+			FString type = obj->GetStringField("type");
+			int32 ID = obj->GetIntegerField("id");
+			if (type == "empty" && ID == tmp_empty_buildings[i]->GetID())
+			{
+				present = true;
+				break;
+			}
+		}
+		if (!present)
+		{
+			DestroyBuilding("empty", tmp_empty_buildings[i]->GetID(), CurrentWorld);
+		}
+	}
+
+	//destroy old offices
+	auto tmp_offices = offices;
+	for (int32 i = 0; i < tmp_offices.Num(); i++)
+	{
+		bool present = false;
+		for (int32 j = 0; j < Info->Num(); j++)
+		{
+			TSharedPtr<FJsonObject> obj = (*Info)[j]->AsObject();
+			FString type = obj->GetStringField("type");
+			int32 ID = obj->GetIntegerField("id");
+			if (type == "office" && ID == tmp_offices[i]->GetID())
+			{
+				present = true;
+				break;
+			}
+		}
+		if (!present)
+		{
+			DestroyBuilding("office", tmp_offices[i]->GetID(), CurrentWorld);
+		}
+	}
+
+	// add new buildings
+	for (int32 i = 0; i < Info->Num(); i++)
 	{
 		TSharedPtr<FJsonObject> obj = (*Info)[i]->AsObject();
 		if (obj != NULL)
@@ -149,7 +216,7 @@ void ObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 
 void ObjectHandler::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld)
 {
-	for (int i = 0; i < Info->Num(); i++)
+	for (int32 i = 0; i < Info->Num(); i++)
 	{
 		TSharedPtr<FJsonObject> obj = (*Info)[i]->AsObject();
 		if (obj != NULL)
@@ -180,7 +247,17 @@ void ObjectHandler::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld
 {
 	if(type == "house")
 	{
-		for(int32 i = 0; i < houses.Num(); i++)
+		auto house = houses.FindByPredicate([&](AHouse* item) {return item->GetID() == ID; });
+		if (house != NULL)
+		{
+			bool destroyed_house = CurrentWorld->DestroyActor(*house);
+			if (destroyed_house)
+			{
+				house_ids.Remove((*house)->GetID());
+				houses.RemoveSingle(*house);
+			}
+		}
+		/*for(int32 i = 0; i < houses.Num(); i++)
 		{
 			if(houses[i] -> GetID() == ID)
 			{
@@ -192,11 +269,21 @@ void ObjectHandler::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld
 					break;	
 				}
 			}
-		}
+		}*/
 	}
 	if(type == "empty")
 	{
-		for(int32 i = 0; i < empty_buildings.Num(); i++)
+		auto empty = empty_buildings.FindByPredicate([&](AEmptyBuilding* item) {return item->GetID() == ID; });
+		if (empty != NULL)
+		{
+			bool destroyed_empty = CurrentWorld->DestroyActor(*empty);
+			if (destroyed_empty)
+			{
+				empty_ids.Remove((*empty)->GetID());
+				empty_buildings.RemoveSingle(*empty);
+			}
+		}
+		/*for(int32 i = 0; i < empty_buildings.Num(); i++)
 		{
 			if(empty_buildings[i] -> GetID() == ID)
 			{
@@ -208,11 +295,21 @@ void ObjectHandler::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld
 					break;
 				}
 			}
-		}
+		}*/
 	}
 	if(type == "office")
 	{
-		for(int32 i = 0; i < offices.Num(); i++)
+		auto office = offices.FindByPredicate([&](AOffice* item) {return item->GetID() == ID; });
+		if (office != NULL)
+		{
+			bool destroyed_office = CurrentWorld->DestroyActor(*office);
+			if (destroyed_office)
+			{
+				office_ids.Remove((*office)->GetID());
+				offices.RemoveSingle(*office);
+			}
+		}
+		/*for(int32 i = 0; i < offices.Num(); i++)
 		{
 			if(offices[i] -> GetID() == ID)
 			{
@@ -224,7 +321,7 @@ void ObjectHandler::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld
 					break;
 				}
 			}
-		}
+		}*/
 	}
 }
 
