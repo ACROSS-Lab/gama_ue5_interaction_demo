@@ -216,6 +216,37 @@ void ObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 
 void ObjectHandler::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld)
 {
+	// change people's location
+	auto tmp_peoples = peoples;
+	for (int32 i = 0; i < tmp_peoples.Num(); i++)
+	{
+		bool present = false;
+		APeople* people = tmp_peoples[i];
+		for (int32 j = 0; j < Info->Num(); j++)
+		{
+			TSharedPtr<FJsonObject> obj = (*Info)[j]->AsObject();
+			int32 ID = obj->GetIntegerField("id");
+			if (ID == tmp_peoples[i]->GetID())
+			{
+				const TSharedPtr<FJsonObject>* Location;
+				if (obj->TryGetObjectField("location", Location))
+				{
+					double x = (*Location)->GetNumberField("x") * scaling_factor;
+					double y = (*Location)->GetNumberField("y") * scaling_factor;
+					//const FVector* Loc = new FVector(x, y, 0.0);
+					peoples[i]->SetPosition(x, y);
+					present = true;
+					break;
+				}
+			}
+		}
+		if (!present)
+		{
+			DestroyPeople(tmp_peoples[i]->GetID(), CurrentWorld);
+		}
+	}
+	
+	// add new people
 	for (int32 i = 0; i < Info->Num(); i++)
 	{
 		TSharedPtr<FJsonObject> obj = (*Info)[i]->AsObject();
@@ -327,7 +358,17 @@ void ObjectHandler::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld
 
 void ObjectHandler::DestroyPeople(int32 ID, UWorld* CurrentWorld)
 {
-	for(int32 i = 0; i < peoples.Num(); i++)
+	auto people = peoples.FindByPredicate([&](APeople* item) {return item->GetID() == ID; });
+	if (people != NULL)
+	{
+		bool destroyed_people = CurrentWorld->DestroyActor(*people);
+		if (destroyed_people)
+		{
+			people_ids.Remove((*people)->GetID());
+			peoples.RemoveSingle(*people);
+		}
+	}
+	/*for(int32 i = 0; i < peoples.Num(); i++)
 	{
 		if(peoples[i] -> GetID() == ID)
 		{
@@ -339,7 +380,7 @@ void ObjectHandler::DestroyPeople(int32 ID, UWorld* CurrentWorld)
 				break;
 			}
 		}
-	}
+	}*/
 }
 
 ObjectHandler::~ObjectHandler()
