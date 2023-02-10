@@ -234,7 +234,7 @@ void ObjectHandler::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UW
 					double x = (*Location)->GetNumberField("x") * scaling_factor;
 					double y = (*Location)->GetNumberField("y") * scaling_factor;
 					//const FVector* Loc = new FVector(x, y, 0.0);
-					peoples[i]->SetPosition(x, y);
+					tmp_peoples[i]->SetPosition(x, y);
 					present = true;
 					break;
 				}
