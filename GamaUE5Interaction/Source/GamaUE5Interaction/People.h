@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "People.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class GAMAUE5INTERACTION_API APeople : public ACharacter
 {
 	GENERATED_BODY()

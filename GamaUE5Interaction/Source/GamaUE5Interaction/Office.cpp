@@ -15,10 +15,12 @@ AOffice::AOffice()
 	position.Y = 0;
 	position.Z = 0;
 
+	type = "office";
+
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
 	// Load the sphere
-	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'")).Object;
+	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Cylinder.Cylinder'")).Object;
 	
 	StaticMesh->SetStaticMesh(sphereMesh);
 	StaticMesh->SetMobility(EComponentMobility::Movable);

@@ -7,7 +7,7 @@
 #include "Building.h"
 #include "Office.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class GAMAUE5INTERACTION_API AOffice : public ABuilding
 {
 	GENERATED_BODY()

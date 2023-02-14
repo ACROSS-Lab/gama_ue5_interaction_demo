@@ -7,7 +7,7 @@
 #include "Building.h"
 #include "EmptyBuilding.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class GAMAUE5INTERACTION_API AEmptyBuilding : public ABuilding
 {
 	GENERATED_BODY()

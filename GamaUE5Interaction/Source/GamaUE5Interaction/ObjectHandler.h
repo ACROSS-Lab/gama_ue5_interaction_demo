@@ -10,9 +10,6 @@
 #include "People.h"
 #include "Containers/Array.h"
 
-/**
- * 
- */
 class GAMAUE5INTERACTION_API ObjectHandler
 {
 private:

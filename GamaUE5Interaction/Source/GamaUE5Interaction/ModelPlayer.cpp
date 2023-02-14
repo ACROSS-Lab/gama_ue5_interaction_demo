@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "ModelPlayer.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
-
+#include "Building.h"
 
 // Sets default values
 AModelPlayer::AModelPlayer()
@@ -98,6 +98,10 @@ void AModelPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	InputComponent->BindAction("ZoomIn", IE_Pressed, this, &AModelPlayer::ZoomIn);
 	InputComponent->BindAction("ZoomIn", IE_Released, this, &AModelPlayer::ZoomOut);
 
+	//Hook up events for Click
+	//InputComponent->BindAction("Click", IE_Pressed, this, &AModelPlayer::Click);
+
+
 	//Hook up every-frame handling for our four axes
 	InputComponent->BindAxis("VerticalMove", this, &AModelPlayer::Move_XAxis);
 	InputComponent->BindAxis("HorizontalMove", this, &AModelPlayer::Move_YAxis);
@@ -134,4 +138,6 @@ void AModelPlayer::ZoomOut()
 {
 	bZoomingIn = false;
 }
+
+
 

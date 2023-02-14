@@ -46,5 +46,4 @@ public:
 	void YawCamera(float AxisValue);
 	void ZoomIn();
 	void ZoomOut();
-	
 };

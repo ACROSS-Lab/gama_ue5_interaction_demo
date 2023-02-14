@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Building.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class GAMAUE5INTERACTION_API ABuilding : public AActor
 {
 	GENERATED_BODY()
@@ -16,6 +16,8 @@ protected:
 	FVector position;
 	//float x_position;
 	//float y_position;
+	FString type;
+
 	UStaticMeshComponent* StaticMesh;
 
 public:	
@@ -35,6 +37,7 @@ public:
 
 public:
 	// get and set building parameters
+	FString GetType();
 	virtual int32 GetID();
 	virtual void SetID(int32 ID);
 	virtual float GetX();

@@ -15,6 +15,8 @@ AHouse::AHouse()
 	position.Y = 0;
 	position.Z = 0;
 
+	type = "house";
+
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
 	// Load the sphere

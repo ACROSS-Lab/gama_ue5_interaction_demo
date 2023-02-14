@@ -176,11 +176,10 @@ void ObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 				double x = (*Location)->GetNumberField("x") * scaling_factor;
 				double y = (*Location)->GetNumberField("y") * scaling_factor;
 
-				const FVector* Loc = new FVector(x, y, 10.0);
+				const FVector* Loc = new FVector(x, y, 0);
 
 				if (type == "house" && !id_found(ID, house_ids))
 				{
-					//const FVector* Loc = new FVector(x,y, 10.0);
 					AHouse* house  = (AHouse*) CurrentWorld->SpawnActor(AHouse::StaticClass(), Loc);
 					if (house != NULL)
 					{

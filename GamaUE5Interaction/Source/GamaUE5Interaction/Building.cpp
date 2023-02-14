@@ -46,6 +46,11 @@ void ABuilding::Tick(float DeltaTime)
 
 }
 
+FString ABuilding::GetType()
+{
+	return type;
+}
+
 int32 ABuilding::GetID()
 {
 	return id;
