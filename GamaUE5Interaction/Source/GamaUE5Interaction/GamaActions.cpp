@@ -5,6 +5,7 @@
 #include "GamaClient.h"
 #include "ExpParameter.h"
 #include "ObjectHandler.h"
+#include "ObjectHandlerr.h"
 #include "GamaActionsMessageHandler.h"
 #include "Common/TcpSocketBuilder.h"
 #include "Interfaces/IPv4/IPv4Address.h"

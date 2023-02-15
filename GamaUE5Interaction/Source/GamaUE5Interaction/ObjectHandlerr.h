@@ -3,15 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
 #include "Dom/JsonObject.h"
 #include "House.h"
 #include "EmptyBuilding.h"
 #include "Office.h"
 #include "People.h"
 #include "Containers/Array.h"
+#include "ObjectHandlerr.generated.h"
 
-class GAMAUE5INTERACTION_API ObjectHandler
+UCLASS()
+class GAMAUE5INTERACTION_API AObjectHandlerr : public AActor
 {
+	GENERATED_BODY()
+	
 private:
 	TArray<int32> house_ids;
 	TArray<int32> empty_ids;
@@ -25,8 +30,9 @@ private:
 
 	int32 scaling_factor;
 
-public:
-	ObjectHandler();
+public:	
+	// Sets default values for this actor's properties
+	AObjectHandlerr();
 
 	bool id_found(int32 ID, TArray<int32> ids);
 
@@ -44,8 +50,19 @@ public:
 	void HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld);
 	void HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld);
 
+	UFUNCTION(BlueprintCallable, Category = "Destroy Function")
 	void DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld);
+
 	void DestroyPeople(int32 ID, UWorld* CurrentWorld);
 
-	~ObjectHandler();
+	~AObjectHandlerr();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 };

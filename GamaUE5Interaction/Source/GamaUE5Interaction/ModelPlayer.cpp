@@ -4,7 +4,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
-#include "Building.h"
+#include "ObjectHandler.h"
 
 // Sets default values
 AModelPlayer::AModelPlayer()

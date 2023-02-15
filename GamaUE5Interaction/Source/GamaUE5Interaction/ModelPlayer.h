@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "ObjectHandler.h"
 #include "ModelPlayer.generated.h"
 
 UCLASS()

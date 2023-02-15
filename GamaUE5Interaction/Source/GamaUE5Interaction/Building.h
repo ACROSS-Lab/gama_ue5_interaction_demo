@@ -37,8 +37,12 @@ public:
 
 public:
 	// get and set building parameters
+	UFUNCTION(BlueprintCallable, Category = "Get Function")
 	FString GetType();
+	
+	UFUNCTION(BlueprintCallable, Category = "Get Function")
 	virtual int32 GetID();
+
 	virtual void SetID(int32 ID);
 	virtual float GetX();
 	virtual float GetY();
