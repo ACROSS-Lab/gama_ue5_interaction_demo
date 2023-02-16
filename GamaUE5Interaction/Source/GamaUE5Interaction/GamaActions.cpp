@@ -6,6 +6,7 @@
 #include "ExpParameter.h"
 #include "ObjectHandler.h"
 #include "ObjectHandlerr.h"
+#include "Math/Vector.h"
 #include "GamaActionsMessageHandler.h"
 #include "Common/TcpSocketBuilder.h"
 #include "Interfaces/IPv4/IPv4Address.h"
@@ -29,7 +30,13 @@ void AGamaActions::BeginPlay()
 	message_handler = new GamaActionsMessageHandler();
 	client = new GamaClient(GAMA_URL, GAMA_SERVER_PORT, message_handler);
 	client -> connect();
-	ObjHandler = new ObjectHandler();
+	
+	//ObjHandler = new ObjectHandler();
+
+	UWorld* CurrentWorld = GetWorld();
+
+	const FVector* Loc = new FVector(-1000, -1000, -1000);
+	ObjHandlerr = (AObjectHandlerr*)CurrentWorld->SpawnActor(AObjectHandlerr::StaticClass(), Loc);
 }
 
 // Called every frame
@@ -97,7 +104,8 @@ void AGamaActions::Tick(float DeltaTime)
 				{
 					// The deserialization failed, handle this case
 					// UE_LOG(LogTemp, Display, TEXT("Unable to deserialize"))
-					ObjHandler->HandleObject(MyJson, GetWorld());
+					//ObjHandler->HandleObject(MyJson, GetWorld());
+					ObjHandlerr->HandleObject(MyJson, GetWorld());
 				}
 
 				
@@ -111,16 +119,18 @@ void AGamaActions::Tick(float DeltaTime)
 			// Unable to read for some reason
 		}
 
+		//SendChange();
+
 		// Randomly picks a house and turns it into an office
-		/*if (ObjHandler->Get_House_Ids().Num() > 0 && FMath::FRand() > 0.99)
-		{
-			auto idx = FMath::RandRange(0, ObjHandler->Get_House_Ids().Num()-1);
-			int id = ObjHandler->Get_House_Ids()[idx];
-			// Sends a message to gama to confirm it's connected
-			FString change_msg = FString("{ \"type\": \"house\", \"id\": ") + FString::FromInt(id) + FString("}\n");
-			int32 BytesSent;
-			TcpSocket -> Send((const uint8*)  TCHAR_TO_ANSI(*change_msg), change_msg.Len(), BytesSent);
-		}*/
+		//if (ObjHandler->Get_House_Ids().Num() > 0 && FMath::FRand() > 0.99)
+		//{
+		//	auto idx = FMath::RandRange(0, ObjHandler->Get_House_Ids().Num()-1);
+		//	int id = ObjHandler->Get_House_Ids()[idx];
+		//	// Sends a message to gama to confirm it's connected
+		//	FString change_msg = FString("{ \"type\": \"house\", \"id\": ") + FString::FromInt(id) + FString("}\n");
+		//	int32 BytesSent;
+		//	TcpSocket -> Send((const uint8*)  TCHAR_TO_ANSI(*change_msg), change_msg.Len(), BytesSent);
+		//}
 		
 	}
 	// step/stepBack command

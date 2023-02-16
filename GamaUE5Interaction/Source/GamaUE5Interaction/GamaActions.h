@@ -10,7 +10,7 @@
 #include "ObjectHandlerr.h"
 #include "GamaActions.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class GAMAUE5INTERACTION_API AGamaActions : public AActor
 {
 	GENERATED_BODY()
@@ -27,13 +27,13 @@ class GAMAUE5INTERACTION_API AGamaActions : public AActor
 
 	// TCP handling
 	FSocket* TcpSocket;
-	ObjectHandler* ObjHandler;
+	//ObjectHandler* ObjHandler;
+	AObjectHandlerr* ObjHandlerr;
 	
 	// Game logic
 	bool first = true;
 	bool played = false;
 	bool tcp_connected = false;
-
 	
 public:	
 	// Sets default values for this actor's properties
@@ -47,6 +47,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SendChange(FString type, int32 ID);
+	UFUNCTION(BlueprintCallable)
+	virtual void SendChange(FString type, int32 ID);
 	
 };

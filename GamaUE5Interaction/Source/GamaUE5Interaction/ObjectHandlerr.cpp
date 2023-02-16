@@ -11,7 +11,7 @@
 #include "Serialization/JsonSerializer.h"
 #include "Containers/Array.h"
 #include "Engine/World.h"
-#include "Containers/Array.h"
+#include "GamaActions.h"
 
 // Sets default values
 AObjectHandlerr::AObjectHandlerr()
@@ -27,6 +27,15 @@ AObjectHandlerr::AObjectHandlerr()
 	empty_buildings = {};
 	offices = {};
 	peoples = {};
+
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+
+	// Load the material
+	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Sphere.Sphere'")).Object;
+	StaticMesh->SetStaticMesh(sphereMesh);
+	StaticMesh->SetMobility(EComponentMobility::Movable);
+	//StaticMesh->SetMaterial()
+	RootComponent = StaticMesh;
 }
 
 bool AObjectHandlerr::id_found(int32 ID, TArray<int32> ids)
@@ -284,8 +293,7 @@ void AObjectHandlerr::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWor
 			bool destroyed_house = CurrentWorld->DestroyActor(*house);
 			if (destroyed_house)
 			{
-				house_ids.Remove((*house)->GetID());
-				houses.RemoveSingle(*house);
+				RemoveHouse(*house);
 			}
 		}
 		/*for(int32 i = 0; i < houses.Num(); i++)
@@ -310,8 +318,7 @@ void AObjectHandlerr::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWor
 			bool destroyed_empty = CurrentWorld->DestroyActor(*empty);
 			if (destroyed_empty)
 			{
-				empty_ids.Remove((*empty)->GetID());
-				empty_buildings.RemoveSingle(*empty);
+				RemoveEmpty(*empty);
 			}
 		}
 		/*for(int32 i = 0; i < empty_buildings.Num(); i++)
@@ -336,8 +343,7 @@ void AObjectHandlerr::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWor
 			bool destroyed_office = CurrentWorld->DestroyActor(*office);
 			if (destroyed_office)
 			{
-				office_ids.Remove((*office)->GetID());
-				offices.RemoveSingle(*office);
+				RemoveOffice(*office);
 			}
 		}
 		/*for(int32 i = 0; i < offices.Num(); i++)
@@ -354,6 +360,28 @@ void AObjectHandlerr::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWor
 			}
 		}*/
 	}
+}
+
+void AObjectHandlerr::RemoveHouse(AHouse* house)
+{
+	int32 ID = house->GetID();
+	house_ids.Remove(ID);
+	houses.RemoveSingle(house);
+	//AGamaActions::SendChange("house", ID);
+}
+
+void AObjectHandlerr::RemoveEmpty(AEmptyBuilding* empty)
+{
+	int32 ID = empty->GetID();
+	empty_ids.Remove(empty->GetID());
+	empty_buildings.RemoveSingle(empty);
+}
+
+void AObjectHandlerr::RemoveOffice(AOffice* office)
+{
+	int32 ID = office->GetID();
+	office_ids.Remove(office->GetID());
+	offices.RemoveSingle(office);
 }
 
 void AObjectHandlerr::DestroyPeople(int32 ID, UWorld* CurrentWorld)
