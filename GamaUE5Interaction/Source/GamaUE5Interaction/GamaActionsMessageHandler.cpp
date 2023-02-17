@@ -14,8 +14,6 @@ void GamaActionsMessageHandler::HandleConnectionSuccessful(TSharedPtr<FJsonObjec
     if(MyJson -> TryGetNumberField("content", socket_id))
     {
         socket_id = MyJson -> GetIntegerField("content");
-        // UE_LOG(LogTemp, Display, TEXT("socket_id extracted"));
-        // UE_LOG(LogTemp, Display, TEXT("%s"), *FString(std::to_string(socket_id).c_str()));
     }
 }
 
@@ -27,8 +25,6 @@ void GamaActionsMessageHandler::HandleCommandExecutedSuccessfully(TSharedPtr<FJs
     if (MyJson -> TryGetNumberField("content", OutNumber))
     {
         exp_id = OutNumber;
-        // UE_LOG(LogTemp, Display, TEXT("exp_id extracted"));
-        // UE_LOG(LogTemp, Display, TEXT("%s"), *FString(std::to_string(exp_id).c_str()));
     }
 
     

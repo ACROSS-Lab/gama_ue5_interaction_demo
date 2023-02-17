@@ -20,11 +20,9 @@ AOffice::AOffice()
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
 	// Load the sphere
-	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Cylinder.Cylinder'")).Object;
-	
-	StaticMesh->SetStaticMesh(sphereMesh);
+	UStaticMesh* cylinderMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Cylinder.Cylinder'")).Object;	
+	StaticMesh->SetStaticMesh(cylinderMesh);
 	StaticMesh->SetMobility(EComponentMobility::Movable);
-	//StaticMesh->SetMaterial()
 	RootComponent = StaticMesh;
 }
 

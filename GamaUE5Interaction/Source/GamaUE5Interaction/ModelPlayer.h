@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "ObjectHandler.h"
 #include "ModelPlayer.generated.h"
 
 UCLASS()
@@ -29,6 +28,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMeshComp;
 
+	// Parameters for movements and camera zoom
 	FVector MovementInput;
 	FVector CameraInput;
 	float ZoomFactor;
@@ -41,10 +41,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Basic directional movements for the player
 	void Move_XAxis(float AxisValue);
 	void Move_YAxis(float AxisValue);
+
+	// Basic camera movements for the camera
 	void PitchCamera(float AxisValue);
 	void YawCamera(float AxisValue);
+
+	// Zooming in and out in the map
 	void ZoomIn();
 	void ZoomOut();
 };

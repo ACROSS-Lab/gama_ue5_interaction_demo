@@ -6,6 +6,9 @@
 
 MessageHandler::MessageHandler()
 {
+    // Set default simulation parameters
+    exp_id = 0;
+    socket_id = 0;
 }
 
 int32 MessageHandler::GetExpId()
@@ -22,12 +25,7 @@ void MessageHandler::HandleCommand(TSharedPtr<FJsonObject> MyJson)
 {
     // FHttpResponsePtr Response;
     FString type;
-    // if (MyJson -> TryGetObjectField("content", Content))
-    // {
-    //     exp_id = (*Content) -> GetIntegerField("exp_id");
-    //     UE_LOG(LogTemp, Display, TEXT("exp_id extracted"));
-    //     UE_LOG(LogTemp, Display, TEXT("%s"), *FString(std::to_string(exp_id).c_str()));
-    // }
+   
     if(MyJson -> TryGetStringField("type", type))
     {
         type = MyJson -> GetStringField("type");
@@ -38,10 +36,6 @@ void MessageHandler::HandleCommand(TSharedPtr<FJsonObject> MyJson)
         else if (type == "CommandExecutedSuccessfully")
         {
             HandleCommandExecutedSuccessfully(MyJson);
-        }
-        else
-        {
-                //
         }
     }
 }

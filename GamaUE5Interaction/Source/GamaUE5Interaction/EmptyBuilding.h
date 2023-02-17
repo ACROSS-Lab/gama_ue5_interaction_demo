@@ -15,7 +15,8 @@ class GAMAUE5INTERACTION_API AEmptyBuilding : public ABuilding
 public:	
 	// Sets default values for this actor's properties
 	AEmptyBuilding();
-
+	
+	// Sets customized values for this actor's properties
 	void Init(int32 ID, float x, float y);
 
 protected:

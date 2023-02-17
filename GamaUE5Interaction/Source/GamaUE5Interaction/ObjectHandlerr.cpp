@@ -34,7 +34,6 @@ AObjectHandlerr::AObjectHandlerr()
 	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Sphere.Sphere'")).Object;
 	StaticMesh->SetStaticMesh(sphereMesh);
 	StaticMesh->SetMobility(EComponentMobility::Movable);
-	//StaticMesh->SetMaterial()
 	RootComponent = StaticMesh;
 }
 
@@ -85,8 +84,6 @@ TArray<APeople*> AObjectHandlerr::GetPeoples()
 
 void AObjectHandlerr::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* CurrentWorld)
 {
-	//const TSharedPtr<FJsonObject>* Info;
-
 	const TArray<TSharedPtr<FJsonValue>>* BuildingInfo;
 	const TArray<TSharedPtr<FJsonValue>>* PeopleInfo;
 

@@ -15,7 +15,8 @@ class GAMAUE5INTERACTION_API AOffice : public ABuilding
 public:	
 	// Sets default values for this actor's properties
 	AOffice();
-
+	
+	// Sets customized values for this actor's properties
 	void Init(int32 ID, float x, float y);
 
 protected:

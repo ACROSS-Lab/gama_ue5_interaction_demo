@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "GamaClient.h"
 #include "GamaActionsMessageHandler.h"
-#include "ObjectHandler.h"
 #include "ObjectHandlerr.h"
 #include "GamaActions.generated.h"
 
@@ -48,6 +47,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void SendChange(FString type, int32 ID);
+
+	// Send changes to Gama
+	void SendChange(FString type, int32 ID);
 	
 };

@@ -20,11 +20,10 @@ AHouse::AHouse()
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
 	// Load the sphere
-	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'")).Object;
+	UStaticMesh* cubeMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'")).Object;
 	
-	StaticMesh->SetStaticMesh(sphereMesh);
+	StaticMesh->SetStaticMesh(cubeMesh);
 	StaticMesh->SetMobility(EComponentMobility::Movable);
-	//StaticMesh->SetMaterial()
 	RootComponent = StaticMesh;
 }
 

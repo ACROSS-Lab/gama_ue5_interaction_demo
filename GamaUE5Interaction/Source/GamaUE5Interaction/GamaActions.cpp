@@ -4,7 +4,6 @@
 #include "GamaActions.h"
 #include "GamaClient.h"
 #include "ExpParameter.h"
-#include "ObjectHandler.h"
 #include "ObjectHandlerr.h"
 #include "Math/Vector.h"
 #include "GamaActionsMessageHandler.h"
@@ -33,8 +32,8 @@ void AGamaActions::BeginPlay()
 	
 	//ObjHandler = new ObjectHandler();
 
+	// Spawn an instance of ObjectHandlerr in the map in a place far from the objects
 	UWorld* CurrentWorld = GetWorld();
-
 	const FVector* Loc = new FVector(-1000, -1000, -1000);
 	ObjHandlerr = (AObjectHandlerr*)CurrentWorld->SpawnActor(AObjectHandlerr::StaticClass(), Loc);
 }
@@ -43,6 +42,8 @@ void AGamaActions::BeginPlay()
 void AGamaActions::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// read the model
 	if (first && message_handler -> GetSocketId() > 0)
 	{
 		FString current_path = FPaths::ProjectDir();
@@ -103,45 +104,14 @@ void AGamaActions::Tick(float DeltaTime)
 				if (FJsonSerializer::Deserialize(Reader, MyJson))
 				{
 					// The deserialization failed, handle this case
-					// UE_LOG(LogTemp, Display, TEXT("Unable to deserialize"))
-					//ObjHandler->HandleObject(MyJson, GetWorld());
 					ObjHandlerr->HandleObject(MyJson, GetWorld());
 				}
-
-				
 				// Cleaning the message from everything after the final \n
 				//message.RemoveFromEnd("\n");
 			}
 			delete[] DataChunk;
-		}
-		else
-		{
-			// Unable to read for some reason
-		}
-
-		//SendChange();
-
-		// Randomly picks a house and turns it into an office
-		//if (ObjHandler->Get_House_Ids().Num() > 0 && FMath::FRand() > 0.99)
-		//{
-		//	auto idx = FMath::RandRange(0, ObjHandler->Get_House_Ids().Num()-1);
-		//	int id = ObjHandler->Get_House_Ids()[idx];
-		//	// Sends a message to gama to confirm it's connected
-		//	FString change_msg = FString("{ \"type\": \"house\", \"id\": ") + FString::FromInt(id) + FString("}\n");
-		//	int32 BytesSent;
-		//	TcpSocket -> Send((const uint8*)  TCHAR_TO_ANSI(*change_msg), change_msg.Len(), BytesSent);
-		//}
-		
+		}	
 	}
-	// step/stepBack command
-	// expression command
-	// if (message_handler -> GetExpId() > 0)
-	// {
-	// 	client -> step(message_handler -> GetSocketId(), message_handler -> GetExpId(), 2, false);
-	// 	client -> expression(message_handler -> GetSocketId(), message_handler -> GetExpId(), "length(prey)");
-	// 	// client -> stepBack(message_handler -> GetSocketId(), message_handler -> GetExpId(), 1, false);
-	// 	// client -> expression(message_handler -> GetSocketId(), message_handler -> GetExpId(), "length(predator)");
-	// }
 }
 
 void AGamaActions::SendChange(FString type, int32 ID)

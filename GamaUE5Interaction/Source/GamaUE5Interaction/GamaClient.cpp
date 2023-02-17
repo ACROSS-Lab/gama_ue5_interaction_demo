@@ -49,14 +49,12 @@ void GamaClient::connect()
     Socket->OnConnectionError().AddLambda([](const FString & Error) -> void {
         // This code will run if the connection failed. Check Error to see what happened.
         UE_LOG(LogTemp, Display, TEXT("Something bad happened while trying to connect"));
-       // UE_LOG(LogTemp, Display, Error);
     });
         
     Socket->OnClosed().AddLambda([](int32 StatusCode, const FString& Reason, bool bWasClean) -> void {
         // This code will run when the connection to the server has been terminated.
         // Because of an error or a call to Socket->Close().
         UE_LOG(LogTemp, Display, TEXT("Connection closed"));
-       // UE_LOG(LogTemp, Display, Reason);
     });
         
     Socket->OnMessage().AddLambda([&](const FString & Message) -> void {

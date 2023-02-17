@@ -18,24 +18,19 @@ class GAMAUE5INTERACTION_API AObjectHandlerr : public AActor
 	GENERATED_BODY()
 	
 private:
-	//UPROPERTY(BlueprintReadOnly)
+	// keeping buildings and people ids
 	TArray<int32> house_ids;
-	//UPROPERTY(BlueprintReadOnly)
 	TArray<int32> empty_ids;
-	//UPROPERTY(BlueprintReadOnly)
 	TArray<int32> office_ids;
-	//UPROPERTY(BlueprintReadOnly)
 	TArray<int32> people_ids;
 
-	//UPROPERTY(BlueprintReadOnly)
+	// keeping buildings and people
 	TArray<AHouse*> houses;
-	//UPROPERTY(BlueprintReadOnly)
 	TArray<AEmptyBuilding*> empty_buildings;
-	//UPROPERTY(BlueprintReadOnly)
 	TArray<AOffice*> offices;
-	//UPROPERTY(BlueprintReadOnly)
 	TArray<APeople*> peoples;
 
+	// scaling for better visibility of buildings
 	int32 scaling_factor;
 
 	UStaticMeshComponent* StaticMesh;
@@ -46,29 +41,23 @@ public:
 
 	bool id_found(int32 ID, TArray<int32> ids);
 
-	UFUNCTION(BlueprintCallable)
 	TArray<int32> GetHouseIds();
-	UFUNCTION(BlueprintCallable)
 	TArray<int32> GetEmptyIds();
-	UFUNCTION(BlueprintCallable)
 	TArray<int32> GetOfficeIds();
-	UFUNCTION(BlueprintCallable)
 	TArray<int32> GetPeopleIds();
 
-	UFUNCTION(BlueprintCallable)
 	TArray<AHouse*> GetHouses();
-	UFUNCTION(BlueprintCallable)
 	TArray<AEmptyBuilding*> GetEmptyBuildings();
-	UFUNCTION(BlueprintCallable)
 	TArray<AOffice*> GetOffices();
-	UFUNCTION(BlueprintCallable)
 	TArray<APeople*> GetPeoples();
 
+	// Handle changes in the model
 	void HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* CurrentWorld);
 	void HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld);
 	void HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld);
 	void DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld);
 
+	// Remove building IDs and buildings out of arrays
 	UFUNCTION(BlueprintCallable)
 	virtual void RemoveHouse(AHouse* house);
 	UFUNCTION(BlueprintCallable)

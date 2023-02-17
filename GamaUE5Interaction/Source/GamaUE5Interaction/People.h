@@ -12,6 +12,7 @@ class GAMAUE5INTERACTION_API APeople : public ACharacter
 	GENERATED_BODY()
 
 private:
+	// Basic properties
 	int32 id;
 	FVector position;
 	UPROPERTY(EditAnywhere)
@@ -21,6 +22,7 @@ public:
 	// Sets default values for this character's properties
 	APeople();
 
+	// Sets customized values for this character's properties
 	void Init(int32 ID, float x, float y);
 
 protected:

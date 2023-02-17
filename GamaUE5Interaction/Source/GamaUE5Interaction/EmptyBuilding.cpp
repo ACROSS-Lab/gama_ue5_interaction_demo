@@ -20,11 +20,10 @@ AEmptyBuilding::AEmptyBuilding()
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
 	// Load the sphere
-	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Cone.Cone'")).Object;
+	UStaticMesh* coneMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Cone.Cone'")).Object;
 	
-	StaticMesh->SetStaticMesh(sphereMesh);
+	StaticMesh->SetStaticMesh(coneMesh);
 	StaticMesh->SetMobility(EComponentMobility::Movable);
-	//StaticMesh->SetMaterial()
 	RootComponent = StaticMesh;
 }
 

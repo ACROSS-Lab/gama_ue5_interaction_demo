@@ -22,7 +22,6 @@ APeople::APeople()
 	
 	StaticMesh->SetStaticMesh(sphereMesh);
 	StaticMesh->SetMobility(EComponentMobility::Movable);
-	//StaticMesh->SetMaterial()
 	RootComponent = StaticMesh;
 	
 }
@@ -33,7 +32,6 @@ void APeople::Init(int32 ID, float x, float y)
 	id = ID;
 	position.X = x;
 	position.Y = y;
-//	position.Z = 0;
 
 	SetActorLocation(position);
 }

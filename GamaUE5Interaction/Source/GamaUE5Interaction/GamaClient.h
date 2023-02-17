@@ -13,13 +13,14 @@ class GAMAUE5INTERACTION_API GamaClient
 {
 private: 
 	TSharedPtr<IWebSocket> Socket;
-	// int64 socket_id;
 	MessageHandler* message_handler;
 public:
 	GamaClient();
 	GamaClient(FString url, int32 port, MessageHandler* message_handler);
 	void connect();
 	bool IsConnected();
+
+	// basic Gama server commands
 	void exit();
 	void load(int64 socket_id, FString file_path, FString experiment_name, bool console = true, bool status = false, bool dialog = false, TArray<ExpParameter*> parameters = TArray<ExpParameter*>(), FString end_condition = "");
 	void play(int64 socket_id, int32 exp_id, bool sync = false);
@@ -29,5 +30,6 @@ public:
 	void stop(int64 socket_id, int32 exp_id);
 	void reload(int64 socket_id, int32 exp_id, TArray<ExpParameter*> parameters = TArray<ExpParameter*>(), FString end_condition = "");
 	void expression(int64 socket_id, int32 exp_id, FString expr);
+
 	virtual ~GamaClient();
 };

@@ -12,10 +12,9 @@ class GAMAUE5INTERACTION_API ABuilding : public AActor
 	GENERATED_BODY()
 
 protected:
+	// basic building properties
 	int32 id;
 	FVector position;
-	//float x_position;
-	//float y_position;
 	FString type;
 
 	UStaticMeshComponent* StaticMesh;
@@ -42,9 +41,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Get Function")
 	virtual int32 GetID();
-
-	virtual void SetID(int32 ID);
 	virtual float GetX();
 	virtual float GetY();
+
+	virtual void SetID(int32 ID);
 	virtual void SetPosition(int32 x, int32 y);
 };
