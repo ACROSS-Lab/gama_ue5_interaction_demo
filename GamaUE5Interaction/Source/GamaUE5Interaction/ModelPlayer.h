@@ -33,6 +33,7 @@ protected:
 	FVector CameraInput;
 	float ZoomFactor;
 	bool bZoomingIn;
+	float MovingSpeed = 10000.0f;
 	
 public:	
 	// Called every frame

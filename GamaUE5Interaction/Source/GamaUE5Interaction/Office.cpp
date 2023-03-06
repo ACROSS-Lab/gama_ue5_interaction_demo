@@ -7,7 +7,7 @@
 AOffice::AOffice()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// Set default values for attributes
 	id = 0;
@@ -16,21 +16,20 @@ AOffice::AOffice()
 	position.Z = 0;
 
 	type = "office";
-
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
+	
 	// Load the sphere
-	UStaticMesh* cylinderMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Cylinder.Cylinder'")).Object;	
+	UStaticMesh* cylinderMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/StaticMesh_office.StaticMesh_office'")).Object;	
 	StaticMesh->SetStaticMesh(cylinderMesh);
 	StaticMesh->SetMobility(EComponentMobility::Movable);
+	
 	RootComponent = StaticMesh;
+	
 }
 
 void AOffice::Init(int32 ID, float x, float y)
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	// Set values for attributes
 	id = ID;
 	position.X = x;

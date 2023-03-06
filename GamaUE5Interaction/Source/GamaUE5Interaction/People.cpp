@@ -18,7 +18,7 @@ APeople::APeople()
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
 	// Load the sphere
-	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Sphere.Sphere'")).Object;
+	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/StaticMesh_people.StaticMesh_people'")).Object;
 	
 	StaticMesh->SetStaticMesh(sphereMesh);
 	StaticMesh->SetMobility(EComponentMobility::Movable);

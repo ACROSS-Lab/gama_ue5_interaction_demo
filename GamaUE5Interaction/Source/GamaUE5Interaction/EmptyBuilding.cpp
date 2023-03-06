@@ -7,7 +7,7 @@
 AEmptyBuilding::AEmptyBuilding()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// Set default values for attributes
 	id = 0;
@@ -29,9 +29,6 @@ AEmptyBuilding::AEmptyBuilding()
 
  void AEmptyBuilding::Init(int32 ID, float x, float y)
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	// Set values for attributes
 	id = ID;
 	position.X = x;

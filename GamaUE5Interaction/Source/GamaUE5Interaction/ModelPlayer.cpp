@@ -80,7 +80,7 @@ void AModelPlayer::Tick(float DeltaTime)
 		if (!MovementInput.IsZero())
 		{
 			//Scale our movement input axis values by 100 units per second
-			MovementInput = MovementInput.GetSafeNormal() * 100.0f;
+			MovementInput = MovementInput.GetSafeNormal() * MovingSpeed;
 			FVector NewLocation = GetActorLocation();
 			NewLocation += GetActorForwardVector() * MovementInput.X * DeltaTime;
 			NewLocation += GetActorRightVector() * MovementInput.Y * DeltaTime;

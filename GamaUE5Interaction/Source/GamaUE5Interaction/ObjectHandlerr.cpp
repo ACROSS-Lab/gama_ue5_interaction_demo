@@ -21,20 +21,13 @@ AObjectHandlerr::AObjectHandlerr()
 	office_ids = {};
 	people_ids = {};
 
-	scaling_factor = 5;
+	scaling_factor = 500;
 
 	houses = {};
 	empty_buildings = {};
 	offices = {};
 	peoples = {};
 
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-
-	// Load the material
-	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Sphere.Sphere'")).Object;
-	StaticMesh->SetStaticMesh(sphereMesh);
-	StaticMesh->SetMobility(EComponentMobility::Movable);
-	RootComponent = StaticMesh;
 }
 
 bool AObjectHandlerr::id_found(int32 ID, TArray<int32> ids)

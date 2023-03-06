@@ -7,7 +7,7 @@
 AHouse::AHouse()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// Set default values for attributes
 	id = 0;
@@ -19,18 +19,20 @@ AHouse::AHouse()
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
+	
 	// Load the sphere
-	UStaticMesh* cubeMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'")).Object;
+	UStaticMesh* cubeMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/StaticMesh_office_bis.StaticMesh_office_bis'")).Object;
 	
 	StaticMesh->SetStaticMesh(cubeMesh);
 	StaticMesh->SetMobility(EComponentMobility::Movable);
+	
 	RootComponent = StaticMesh;
+
 }
 
 void AHouse::Init(int32 ID, float x, float y)
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+
 
 	// Set values for attributes
 	id = ID;
