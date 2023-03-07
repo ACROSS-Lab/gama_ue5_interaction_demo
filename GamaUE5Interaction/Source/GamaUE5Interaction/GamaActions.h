@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GamaClient.h"
 #include "GamaActionsMessageHandler.h"
-#include "ObjectHandlerr.h"
+#include "ObjectHandler.h"
 #include "GamaActions.generated.h"
 
 UCLASS(BlueprintType)
@@ -27,7 +27,7 @@ class GAMAUE5INTERACTION_API AGamaActions : public AActor
 	// TCP handling
 	FSocket* TcpSocket;
 	//ObjectHandler* ObjHandler;
-	AObjectHandlerr* ObjHandlerr;
+	AObjectHandler* ObjHandler;
 	
 	// Game logic
 	bool first = true;

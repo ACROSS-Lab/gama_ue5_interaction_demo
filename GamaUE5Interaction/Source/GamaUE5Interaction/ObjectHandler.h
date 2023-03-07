@@ -10,10 +10,10 @@
 #include "Office.h"
 #include "People.h"
 #include "Containers/Array.h"
-#include "ObjectHandlerr.generated.h"
+#include "ObjectHandler.generated.h"
 
 UCLASS(BlueprintType)
-class GAMAUE5INTERACTION_API AObjectHandlerr : public AActor
+class GAMAUE5INTERACTION_API AObjectHandler : public AActor
 {
 	GENERATED_BODY()
 	
@@ -37,7 +37,7 @@ private:
 
 public:	
 	// Sets default values for this actor's properties
-	AObjectHandlerr();
+	AObjectHandler();
 
 	bool id_found(int32 ID, TArray<int32> ids);
 
@@ -67,7 +67,7 @@ public:
 
 	void DestroyPeople(int32 ID, UWorld* CurrentWorld);
 
-	~AObjectHandlerr();
+	~AObjectHandler();
 
 protected:
 	// Called when the game starts or when spawned

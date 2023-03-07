@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ObjectHandlerr.h"
+#include "ObjectHandler.h"
 #include "Building.h"
 #include "House.h"
 #include "EmptyBuilding.h"
@@ -14,7 +14,7 @@
 #include "GamaActions.h"
 
 // Sets default values
-AObjectHandlerr::AObjectHandlerr()
+AObjectHandler::AObjectHandler()
 {
 	house_ids = {};
 	empty_ids = {};
@@ -30,52 +30,52 @@ AObjectHandlerr::AObjectHandlerr()
 
 }
 
-bool AObjectHandlerr::id_found(int32 ID, TArray<int32> ids)
+bool AObjectHandler::id_found(int32 ID, TArray<int32> ids)
 {
 	return ids.Find(ID) >= 0;
 }
 
-TArray<int32> AObjectHandlerr::GetHouseIds()
+TArray<int32> AObjectHandler::GetHouseIds()
 {
 	return house_ids;
 }
 
-TArray<int32> AObjectHandlerr::GetEmptyIds()
+TArray<int32> AObjectHandler::GetEmptyIds()
 {
 	return empty_ids;
 }
 
-TArray<int32> AObjectHandlerr::GetOfficeIds()
+TArray<int32> AObjectHandler::GetOfficeIds()
 {
 	return office_ids;
 }
 
-TArray<int32> AObjectHandlerr::GetPeopleIds()
+TArray<int32> AObjectHandler::GetPeopleIds()
 {
 	return people_ids;
 }
 
-TArray<AHouse*> AObjectHandlerr::GetHouses()
+TArray<AHouse*> AObjectHandler::GetHouses()
 {
 	return houses;
 }
 
-TArray<AEmptyBuilding*> AObjectHandlerr::GetEmptyBuildings()
+TArray<AEmptyBuilding*> AObjectHandler::GetEmptyBuildings()
 {
 	return empty_buildings;
 }
 
-TArray<AOffice*> AObjectHandlerr::GetOffices()
+TArray<AOffice*> AObjectHandler::GetOffices()
 {
 	return offices;
 }
 
-TArray<APeople*> AObjectHandlerr::GetPeoples()
+TArray<APeople*> AObjectHandler::GetPeoples()
 {
 	return peoples;
 }
 
-void AObjectHandlerr::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* CurrentWorld)
+void AObjectHandler::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* CurrentWorld)
 {
 	const TArray<TSharedPtr<FJsonValue>>* BuildingInfo;
 	const TArray<TSharedPtr<FJsonValue>>* PeopleInfo;
@@ -91,7 +91,7 @@ void AObjectHandlerr::HandleObject(TSharedPtr<FJsonObject> MyJson, UWorld* Curre
 	}
 }
 
-void AObjectHandlerr::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld)
+void AObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld)
 {
 	// destroy old house
 	auto tmp_houses = houses;
@@ -213,7 +213,7 @@ void AObjectHandlerr::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info
 	}
 }
 
-void AObjectHandlerr::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld)
+void AObjectHandler::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, UWorld* CurrentWorld)
 {
 	// change people's location
 	auto tmp_peoples = peoples;
@@ -233,7 +233,9 @@ void AObjectHandlerr::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 					double x = (*Location)->GetNumberField("x") * scaling_factor;
 					double y = (*Location)->GetNumberField("y") * scaling_factor;
 					//const FVector* Loc = new FVector(x, y, 0.0);
-					tmp_peoples[i]->SetPosition(x, y);
+					double heading = obj->GetNumberField("heading");
+					tmp_peoples[i]->SetPosition(x, y, heading);
+					
 					present = true;
 					break;
 				}
@@ -273,7 +275,7 @@ void AObjectHandlerr::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, 
 	}
 }
 
-void AObjectHandlerr::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld)
+void AObjectHandler::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWorld)
 {
 	if (type == "house")
 	{
@@ -352,7 +354,7 @@ void AObjectHandlerr::DestroyBuilding(FString type, int32 ID, UWorld* CurrentWor
 	}
 }
 
-void AObjectHandlerr::RemoveHouse(AHouse* house)
+void AObjectHandler::RemoveHouse(AHouse* house)
 {
 	int32 ID = house->GetID();
 	house_ids.Remove(ID);
@@ -360,21 +362,21 @@ void AObjectHandlerr::RemoveHouse(AHouse* house)
 	//AGamaActions::SendChange("house", ID);
 }
 
-void AObjectHandlerr::RemoveEmpty(AEmptyBuilding* empty)
+void AObjectHandler::RemoveEmpty(AEmptyBuilding* empty)
 {
 	int32 ID = empty->GetID();
 	empty_ids.Remove(empty->GetID());
 	empty_buildings.RemoveSingle(empty);
 }
 
-void AObjectHandlerr::RemoveOffice(AOffice* office)
+void AObjectHandler::RemoveOffice(AOffice* office)
 {
 	int32 ID = office->GetID();
 	office_ids.Remove(office->GetID());
 	offices.RemoveSingle(office);
 }
 
-void AObjectHandlerr::DestroyPeople(int32 ID, UWorld* CurrentWorld)
+void AObjectHandler::DestroyPeople(int32 ID, UWorld* CurrentWorld)
 {
 	auto people = peoples.FindByPredicate([&](APeople* item) {return item->GetID() == ID; });
 	if (people != NULL)
@@ -401,19 +403,19 @@ void AObjectHandlerr::DestroyPeople(int32 ID, UWorld* CurrentWorld)
 	}*/
 }
 
-AObjectHandlerr::~AObjectHandlerr()
+AObjectHandler::~AObjectHandler()
 {
 }
 
 // Called when the game starts or when spawned
-void AObjectHandlerr::BeginPlay()
+void AObjectHandler::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AObjectHandlerr::Tick(float DeltaTime)
+void AObjectHandler::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

@@ -76,10 +76,11 @@ int32 APeople::GetY()
 	return position.Y;
 }
 
-void APeople::SetPosition(float x, float y)
+void APeople::SetPosition(float x, float y, float heading)
 {
 	position.X = x;
 	position.Y = y;
 	SetActorLocation(position);
+	SetActorRotation(FRotator(0,heading,0));
 }
 

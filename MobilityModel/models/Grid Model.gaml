@@ -33,9 +33,18 @@ global skills:[network]{
 		loop i from:0 to:7 {
 			loop j from:0 to:7 {
 				let ev <- environment[i,j];
+				empty_building b;
+				
 				create empty_building {
 					location <- ev.location;
 					shape <- ev.shape;
+					b <- self;
+				}	
+				if (flip(2/3.0)) {
+					house h <- change_empty_building_to_house(b);
+					if flip(1.0/2){
+						let o <- change_house_to_office(h);
+					}
 				}
 			}	
 		}
@@ -157,7 +166,7 @@ global skills:[network]{
 		ask inhabitant{
 			if ( office none_matches (each overlaps location)) {
 				if (available_office none_matches (each overlaps office_location) ) {
-					office_location <- not empty(available_office) ? any_location_in(one_of(available_office))  : house_location;					
+					office_location <- not empty(available_office) ? any_location_in(one_of(available_office))  : nil;					
 				}										
 			}
 		}
@@ -174,7 +183,8 @@ global skills:[network]{
 		}
 	}
 	
-	action change_house_to_office(house old_house) {
+	office change_house_to_office(house old_house) {
+		office o;
 		//kill inhabitant belonging to that house
 		loop i over: inhabitant{
 			if (old_house overlaps i.house_location){
@@ -186,17 +196,20 @@ global skills:[network]{
 		create office{
 			location <- old_house.location;
 			shape <- old_house.shape;	
+			o <- self;
 		}
 		ask old_house{
 			do die;			
 		}		
+		return o;
 	}
 	
-	action change_office_to_empty_building(office old_office) {
-		
+	empty_building change_office_to_empty_building(office old_office) {
+		empty_building b;
 		create empty_building {
 			location <- old_office.location;
 			shape <- old_office.shape;	
+			b <- self;
 		}
 
 		available_office >> old_office;
@@ -207,9 +220,11 @@ global skills:[network]{
 		ask old_office{
 			do die;
 		}
+		return b;
 	}
 	
-	action change_empty_building_to_house(empty_building old_building){
+	house change_empty_building_to_house(empty_building old_building){
+		house h;
 		create house{
 			location <- old_building.location;
 			shape <- old_building.shape;
@@ -218,10 +233,12 @@ global skills:[network]{
 				house_location <- location;
 				office_location <- not empty(available_office) ? any_location_in(one_of(available_office)) : nil;
 			}				
+			h <- self;
 		}
 		ask old_building {
 			do die;
 		}
+		return h;
 	}
 	
 	action mouse_click{
@@ -284,15 +301,15 @@ species inhabitant skills:[moving]{
 		}
 	}
 	
-	reflex moving when: target != nil{
-		do goto target:target on:road_network speed:speed;
-		if (location = target){
-			target <-  nil;
+	reflex moving {
+		if  target = nil {
+			target <- any_location_in(world);
 		}
+		do goto target:target on:road_network speed:speed;			
 	}	
 	
 	map to_json {
-		return map("id"::int(self), "location":: map('x'::location.x, 'y'::location.y));
+		return map("id"::int(self), "location":: map('x'::location.x, 'y'::location.y), "heading"::heading);
 	}
 }
 

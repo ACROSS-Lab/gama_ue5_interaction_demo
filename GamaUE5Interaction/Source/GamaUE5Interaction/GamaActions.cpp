@@ -4,7 +4,6 @@
 #include "GamaActions.h"
 #include "GamaClient.h"
 #include "ExpParameter.h"
-#include "ObjectHandlerr.h"
 #include "Math/Vector.h"
 #include "GamaActionsMessageHandler.h"
 #include "Common/TcpSocketBuilder.h"
@@ -35,7 +34,7 @@ void AGamaActions::BeginPlay()
 	// Spawn an instance of ObjectHandlerr in the map in a place far from the objects
 	UWorld* CurrentWorld = GetWorld();
 	const FVector* Loc = new FVector(-1000, -1000, -1000);
-	ObjHandlerr = (AObjectHandlerr*)CurrentWorld->SpawnActor(AObjectHandlerr::StaticClass(), Loc);
+	ObjHandler = (AObjectHandler*)CurrentWorld->SpawnActor(AObjectHandler::StaticClass(), Loc);
 }
 
 // Called every frame
@@ -104,7 +103,7 @@ void AGamaActions::Tick(float DeltaTime)
 				if (FJsonSerializer::Deserialize(Reader, MyJson))
 				{
 					// The deserialization failed, handle this case
-					ObjHandlerr->HandleObject(MyJson, GetWorld());
+					ObjHandler->HandleObject(MyJson, GetWorld());
 				}
 				// Cleaning the message from everything after the final \n
 				//message.RemoveFromEnd("\n");
