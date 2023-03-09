@@ -20,9 +20,9 @@ AOffice::AOffice()
 
 	
 	// Load the sphere
-	UStaticMesh* cylinderMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/StaticMesh_office.StaticMesh_office'")).Object;	
-	StaticMesh->SetStaticMesh(cylinderMesh);
-	StaticMesh->SetMobility(EComponentMobility::Movable);
+	UStaticMesh* mesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/StaticMesh_office.StaticMesh_office'")).Object;	
+	StaticMesh->SetStaticMesh(mesh);
+	StaticMesh->SetMobility(EComponentMobility::Static);
 	
 	RootComponent = StaticMesh;
 	

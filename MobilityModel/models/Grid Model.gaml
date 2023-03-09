@@ -25,6 +25,9 @@ global skills:[network]{
 	map<road,float> new_weights;
 	geometry shape <- square(30*8);
 	
+	int office_capacity <- 200;
+	int house_capacity <- 200;
+	
 	init{	
 		create road from: split_lines(union(environment collect each.shape.contour));	
 		road_network <- as_edge_graph(road);
@@ -174,10 +177,10 @@ global skills:[network]{
 
 	reflex update_available_office{
 		loop i over: office{
-			if(length(inhabitant overlapping i) < 20 and !(i in available_office)){
+			if(length(inhabitant overlapping i) < office_capacity and !(i in available_office)){
 				available_office <- available_office + i;
 			}
-			if((i in available_office) and (length(inhabitant overlapping i) >= 20)){
+			if((i in available_office) and (length(inhabitant overlapping i) >= office_capacity)){
 				available_office <- available_office - i;
 			}	
 		}
@@ -228,7 +231,7 @@ global skills:[network]{
 		create house{
 			location <- old_building.location;
 			shape <- old_building.shape;
-			create inhabitant number: 20{
+			create inhabitant number: house_capacity{
 				location <- any_location_in((myself).shape);
 				house_location <- location;
 				office_location <- not empty(available_office) ? any_location_in(one_of(available_office)) : nil;
@@ -350,7 +353,7 @@ grid environment height:8 width:8 neighbors:4{
 
 }
 
-experiment grid_model type:gui{
+experiment grid_model type:gui autorun:true{
 
 	float minimum_cycle_duration <- 0.1#second;
 

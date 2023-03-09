@@ -20,11 +20,17 @@ AHouse::AHouse()
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
 	
-	// Load the sphere
-	UStaticMesh* cubeMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/StaticMesh_office_bis.StaticMesh_office_bis'")).Object;
+	// Load the house building
+	UStaticMesh* buildingMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/StaticMesh_office_bis.StaticMesh_office_bis'")).Object;
 	
-	StaticMesh->SetStaticMesh(cubeMesh);
-	StaticMesh->SetMobility(EComponentMobility::Movable);
+	StaticMesh->SetStaticMesh(buildingMesh);
+	StaticMesh->SetMobility(EComponentMobility::Static);
+	
+
+	//auto Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	//UStaticMesh* mesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Plane.Plane'")).Object;
+	//Mesh->SetStaticMesh(mesh);
+	//Mesh->AttachedParent = StaticMesh;
 	
 	RootComponent = StaticMesh;
 

@@ -17,10 +17,10 @@ APeople::APeople()
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
-	// Load the sphere
-	UStaticMesh* sphereMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/SM_vehicule.SM_vehicule'")).Object;
-	
-	StaticMesh->SetStaticMesh(sphereMesh);
+	// Load the car
+	UStaticMesh* mesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/SM_vehicule.SM_vehicule'")).Object;
+
+	StaticMesh->SetStaticMesh(mesh);
 	StaticMesh->SetMobility(EComponentMobility::Movable);
 	RootComponent = StaticMesh;
 	
