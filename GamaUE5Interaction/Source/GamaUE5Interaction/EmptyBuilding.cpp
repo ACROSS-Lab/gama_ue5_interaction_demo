@@ -24,6 +24,7 @@ AEmptyBuilding::AEmptyBuilding()
 	StaticMesh->SetStaticMesh(mesh);
 	StaticMesh->SetWorldScale3D(FVector3d(150, 150, 1));
 	StaticMesh->SetMobility(EComponentMobility::Static);
+	
 	RootComponent = StaticMesh;
 }
 

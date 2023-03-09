@@ -25,8 +25,8 @@ global skills:[network]{
 	map<road,float> new_weights;
 	geometry shape <- square(30*8);
 	
-	int office_capacity <- 200;
-	int house_capacity <- 200;
+	int office_capacity <- 50 parameter:true;
+	int house_capacity <- 50 parameter:true;
 	
 	init{	
 		create road from: split_lines(union(environment collect each.shape.contour));	
