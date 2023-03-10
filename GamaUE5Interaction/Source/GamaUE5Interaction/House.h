@@ -16,9 +16,6 @@ public:
 	// Sets default values for this actor's properties
 	AHouse();
 
-	// Sets customized values for this actor's properties
-	void Init(int32 ID, float x, float y);
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

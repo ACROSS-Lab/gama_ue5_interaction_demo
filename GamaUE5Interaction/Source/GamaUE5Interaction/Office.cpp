@@ -11,9 +11,6 @@ AOffice::AOffice()
 
 	// Set default values for attributes
 	id = 0;
-	position.X = 0;
-	position.Y = 0;
-	position.Z = 0;
 
 	type = "office";
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
@@ -28,16 +25,7 @@ AOffice::AOffice()
 	
 }
 
-void AOffice::Init(int32 ID, float x, float y)
-{
-	// Set values for attributes
-	id = ID;
-	position.X = x;
-	position.Y = y;
-	position.Z = 0;
 
-	SetActorLocation(position);
-}
 
 // Called when the game starts or when spawned
 void AOffice::BeginPlay()

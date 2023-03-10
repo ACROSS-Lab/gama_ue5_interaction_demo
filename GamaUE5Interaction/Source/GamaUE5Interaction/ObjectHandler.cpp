@@ -183,7 +183,7 @@ void AObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info,
 					AHouse* house = (AHouse*)CurrentWorld->SpawnActor(AHouse::StaticClass(), Loc);
 					if (house != NULL)
 					{
-						house->Init(ID, x, y);
+						house->SetID(ID);
 						houses.Add(house);
 						house_ids.Add(ID);
 					}
@@ -193,7 +193,7 @@ void AObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info,
 					AEmptyBuilding* empty = (AEmptyBuilding*)CurrentWorld->SpawnActor(AEmptyBuilding::StaticClass(), Loc);
 					if (empty != NULL)
 					{
-						empty->Init(ID, x, y);
+						empty->SetID(ID);
 						empty_buildings.Add(empty);
 						empty_ids.Add(ID);
 					}
@@ -203,7 +203,7 @@ void AObjectHandler::HandleBuilding(const TArray<TSharedPtr<FJsonValue>>*& Info,
 					AOffice* office = (AOffice*)CurrentWorld->SpawnActor(AOffice::StaticClass(), Loc);
 					if (office != NULL)
 					{
-						office->Init(ID, x, y);
+						office->SetID(ID);
 						offices.Add(office);
 						office_ids.Add(ID);
 					}

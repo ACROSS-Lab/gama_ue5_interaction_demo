@@ -11,9 +11,6 @@ AEmptyBuilding::AEmptyBuilding()
 
 	// Set default values for attributes
 	id = 0;
-	position.X = 0;
-	position.Y = 0;
-	position.Z = 0;
 
 	type = "empty";
 
@@ -28,16 +25,6 @@ AEmptyBuilding::AEmptyBuilding()
 	RootComponent = StaticMesh;
 }
 
- void AEmptyBuilding::Init(int32 ID, float x, float y)
-{
-	// Set values for attributes
-	id = ID;
-	position.X = x;
-	position.Y = y;
-	position.Z = 0;
-
-	SetActorLocation(position);
-}
 
 // Called when the game starts or when spawned
 void AEmptyBuilding::BeginPlay()
