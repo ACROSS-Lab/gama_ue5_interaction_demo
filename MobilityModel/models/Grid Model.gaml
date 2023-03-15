@@ -28,6 +28,7 @@ global skills:[network]{
 	int office_capacity <- 50 parameter:true;
 	int house_capacity <- 50 parameter:true;
 	
+	
 	init{	
 		create road from: split_lines(union(environment collect each.shape.contour));	
 		road_network <- as_edge_graph(road);
@@ -370,3 +371,5 @@ experiment grid_model type:gui autorun:true{
 		}	
 	}
 }
+
+
