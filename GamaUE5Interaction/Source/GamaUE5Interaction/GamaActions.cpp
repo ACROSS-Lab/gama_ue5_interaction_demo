@@ -37,6 +37,21 @@ void AGamaActions::BeginPlay()
 	ObjHandler = (AObjectHandler*)CurrentWorld->SpawnActor(AObjectHandler::StaticClass(), Loc);
 }
 
+void AGamaActions::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	GetWorld()->DestroyActor(ObjHandler);
+	delete message_handler;
+	delete client;
+	ISocketSubsystem* SocketSubsystem = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM);
+	if (SocketSubsystem != nullptr) {
+		SocketSubsystem->DestroySocket(TcpSocket);
+	}
+	delete TcpSocket;
+
+}
+
 // Called every frame
 void AGamaActions::Tick(float DeltaTime)
 {
@@ -85,31 +100,32 @@ void AGamaActions::Tick(float DeltaTime)
 	if (tcp_connected)
 	{
 		uint32 BufferSize;
-		if (TcpSocket -> HasPendingData(BufferSize))
-		{
+		FString message = "";
+		//we loop over everything that's pending to reconstitute the full message
+		while (TcpSocket->HasPendingData(BufferSize)) {
 			uint8* DataChunk = new uint8[BufferSize+1];
 			int32 BytesRead;
 			if (TcpSocket -> Recv(DataChunk, BufferSize, BytesRead) && BytesRead > 0)
-			{
-				DataChunk[BufferSize] = '\0'; // Hack
-				FString message = UTF8_TO_TCHAR(DataChunk);
-
-				UE_LOG(LogTemp, Display, TEXT("%s"), *message);
-
-				TSharedPtr<FJsonObject> MyJson;
-
-				TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(*message);
-
-				if (FJsonSerializer::Deserialize(Reader, MyJson))
-				{
-					// The deserialization failed, handle this case
-					ObjHandler->HandleObject(MyJson, GetWorld());
-				}
-				// Cleaning the message from everything after the final \n
-				//message.RemoveFromEnd("\n");
-			}
+			DataChunk[BufferSize] = '\0'; // Hack
+			message += UTF8_TO_TCHAR(DataChunk);
 			delete[] DataChunk;
-		}	
+		}
+
+		if (message != "") {
+			TSharedPtr<FJsonObject> MyJson;
+
+			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(*message);
+
+			if (FJsonSerializer::Deserialize(Reader, MyJson))
+			{
+				UE_LOG(LogTemp, Display, TEXT("Received and deserialized: %s"), *message);
+				ObjHandler->HandleObject(MyJson, GetWorld());
+			}
+			else {
+				// The deserialization failed, handle this case
+				UE_LOG(LogTemp, Display, TEXT("Unable to deserialize message: %s\nReason: %s"), *message, *Reader->GetErrorMessage());
+			}
+		}
 	}
 }
 

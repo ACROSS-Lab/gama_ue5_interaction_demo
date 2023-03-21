@@ -313,7 +313,7 @@ species inhabitant skills:[moving]{
 	}	
 	
 	map to_json {
-		return map("id"::int(self), "location":: map('x'::location.x, 'y'::location.y), "heading"::heading);
+		return map("id"::int(self), "location":: map('x'::int(location.x), 'y'::int(location.y)), "heading"::int(heading));
 	}
 }
 
@@ -327,7 +327,7 @@ species road{
 species building {
 	string type <- "default";
 	map to_json {
-		return map("id":: int(self), "type":: type, "location":: map('x'::location.x, 'y'::location.y));
+		return map("id":: int(self), "type":: type, "location":: map('x'::int(location.x), 'y'::int(location.y)));
 	}
 }
 
