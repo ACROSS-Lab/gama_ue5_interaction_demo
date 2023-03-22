@@ -123,7 +123,7 @@ void AGamaActions::Tick(float DeltaTime)
 			}
 			else {
 				// The deserialization failed, handle this case
-				UE_LOG(LogTemp, Display, TEXT("Unable to deserialize message: %s\nReason: %s"), *message, *Reader->GetErrorMessage());
+				UE_LOG(LogTemp, Display, TEXT("Unable to deserialize because: %s Message: %s"), *Reader->GetErrorMessage(), *message);
 			}
 		}
 	}

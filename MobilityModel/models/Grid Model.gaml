@@ -18,7 +18,7 @@ global skills:[network]{
 	
 	
 	// Simulation parameters
-	float step <- 1#second;
+	float step <- 0.2#second;
 	
 	list available_office <- [];
 	graph road_network;
@@ -314,6 +314,10 @@ species inhabitant skills:[moving]{
 	
 	map to_json {
 		return map("id"::int(self), "location":: map('x'::int(location.x), 'y'::int(location.y)), "heading"::int(heading));
+	}
+	
+	list to_array {
+		return [int(self), int(location.x), int(location.y), int(heading)];
 	}
 }
 
