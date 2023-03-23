@@ -18,7 +18,7 @@ global skills:[network]{
 	
 	
 	// Simulation parameters
-	float step <- 0.2#second;
+	float step <- 1#second;
 	
 	list available_office <- [];
 	graph road_network;
@@ -360,7 +360,7 @@ grid environment height:8 width:8 neighbors:4{
 
 experiment grid_model type:gui autorun:true{
 
-	float minimum_cycle_duration <- 0.1#second;
+	float minimum_cycle_duration <- 0.5#second;
 
 	output{
 		
