@@ -16,7 +16,7 @@ public:
 	ExpParameter(FString Type, FString Value, FString Name);
 
 	// Convert the list of parameters into a string message
-	FString Convert();
+	FString Convert() const;
 
 	~ExpParameter();
 };

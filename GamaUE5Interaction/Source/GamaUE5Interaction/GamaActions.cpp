@@ -48,8 +48,6 @@ void AGamaActions::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	if (SocketSubsystem != nullptr) {
 		SocketSubsystem->DestroySocket(TcpSocket);
 	}
-	delete TcpSocket;
-
 }
 
 // Called every frame
@@ -106,7 +104,7 @@ void AGamaActions::Tick(float DeltaTime)
 			uint8* DataChunk = new uint8[BufferSize+1];
 			int32 BytesRead;
 			if (TcpSocket -> Recv(DataChunk, BufferSize, BytesRead) && BytesRead > 0)
-			DataChunk[BufferSize] = '\0'; // Hack
+			DataChunk[BufferSize] = '\0'; // needs to add the end of string symbol
 			message += UTF8_TO_TCHAR(DataChunk);
 			delete[] DataChunk;
 		}
@@ -129,9 +127,9 @@ void AGamaActions::Tick(float DeltaTime)
 	}
 }
 
-void AGamaActions::SendChange(FString type, int32 ID)
+void AGamaActions::SendChange(int type,int32 ID) const
 {
-	FString change_msg = FString("{ \"type\": \"") + type + FString("\", \"id\": ") + FString::FromInt(ID) + FString("}\n");
+	FString change_msg = FString("{ \"type\": ") + FString::FromInt(type) + FString(", \"id\": ") + FString::FromInt(ID) + FString("}\n");
 	int32 BytesSent;
 	TcpSocket -> Send((const uint8*)  TCHAR_TO_ANSI(*change_msg), change_msg.Len(), BytesSent);
 }

@@ -10,13 +10,13 @@ AOffice::AOffice()
 	PrimaryActorTick.bCanEverTick = false;
 
 	// Set default values for attributes
-	id = 0;
+	id = -1;
 
-	type = "office";
+	type = Office;
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
 	
-	// Load the sphere
+	// Load the building
 	UStaticMesh* mesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/StaticMesh_office.StaticMesh_office'")).Object;	
 	StaticMesh->SetStaticMesh(mesh);
 	StaticMesh->SetMobility(EComponentMobility::Static);

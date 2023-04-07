@@ -39,7 +39,7 @@ void GamaActionsMessageHandler::HandleCommandExecutedSuccessfully(TSharedPtr<FJs
     }
 }
 
-bool GamaActionsMessageHandler::IsPlaying()
+bool GamaActionsMessageHandler::IsPlaying() const
 {
     return playing;
 }

@@ -10,9 +10,9 @@ AHouse::AHouse()
 	PrimaryActorTick.bCanEverTick = false;
 
 	// Set default values for attributes
-	id = 0;
+	id = -1;
 
-	type = "house";
+	type = House;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 

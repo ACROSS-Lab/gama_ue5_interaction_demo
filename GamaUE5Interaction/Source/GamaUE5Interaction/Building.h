@@ -6,19 +6,25 @@
 #include "GameFramework/Actor.h"
 #include "Building.generated.h"
 
+
+
 UCLASS(BlueprintType)
 class GAMAUE5INTERACTION_API ABuilding : public AActor
 {
 	GENERATED_BODY()
 
-protected:
-	// basic building properties
-	int32 id;
-	FString type;
-
-	UStaticMeshComponent* StaticMesh;
-
 public:	
+
+	enum BuildingTypes
+	{
+		Empty,
+		House,
+		Office
+	};
+
+
+
+
 	// Sets default values for this actor's properties
 	ABuilding();
 
@@ -32,12 +38,20 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	// get and set building parameters
+	//// get and set building parameters
 	UFUNCTION(BlueprintCallable, Category = "Get Function")
-	FString GetType();
+	int GetType() const;
 	
 	UFUNCTION(BlueprintCallable, Category = "Get Function")
-	virtual int32 GetID();
+	virtual int32 GetID() const;
 
 	virtual void SetID(int32 ID);
+
+protected:
+	// basic building properties
+	int32 id;
+	BuildingTypes type;
+
+	UStaticMeshComponent* StaticMesh;
+
 };

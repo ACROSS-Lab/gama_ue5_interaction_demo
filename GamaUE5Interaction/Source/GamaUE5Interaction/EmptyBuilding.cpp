@@ -10,13 +10,13 @@ AEmptyBuilding::AEmptyBuilding()
 	PrimaryActorTick.bCanEverTick = false;
 
 	// Set default values for attributes
-	id = 0;
+	id = -1;
 
-	type = "empty";
+	type = Empty;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 
-	// Load the sphere
+	// Load the surface
 	UStaticMesh* mesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Plane.Plane'")).Object;
 	StaticMesh->SetStaticMesh(mesh);
 	StaticMesh->SetWorldScale3D(FVector3d(150, 150, 1));

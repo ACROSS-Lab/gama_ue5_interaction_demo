@@ -33,12 +33,12 @@ GamaClient::GamaClient(FString url, int32 port, MessageHandler* message_handler)
     Socket = FWebSocketsModule::Get().CreateWebSocket(ServerURL, ServerProtocol);
 }
 
-bool GamaClient::IsConnected()
+bool GamaClient::IsConnected() const
 {
     return Socket -> IsConnected();
 }
 
-void GamaClient::connect()
+void GamaClient::connect() const
 {
     // We bind all available events
     Socket->OnConnected().AddLambda([]() -> void {
@@ -89,7 +89,7 @@ void GamaClient::connect()
     Socket->Connect();
 }
 
-void GamaClient::exit()
+void GamaClient::exit() const
 {
     if(!Socket -> IsConnected())
     {
@@ -104,7 +104,7 @@ void GamaClient::exit()
     Socket -> Send(exit_command);
 }
 
-void GamaClient::load(int64 socket_id, FString file_path, FString experiment_name, bool console, bool status, bool dialog, TArray<ExpParameter*> parameters, FString end_condition)
+void GamaClient::load(int64 socket_id, FString file_path, FString experiment_name, bool console, bool status, bool dialog, TArray<ExpParameter*> parameters, FString end_condition) const
 {
     if (!Socket->IsConnected())
     {
@@ -118,7 +118,9 @@ void GamaClient::load(int64 socket_id, FString file_path, FString experiment_nam
     for(int i = 0; i < parameters.Num(); i++)
     {
         params += parameters[i] -> Convert();
-        if(i != parameters.Num() - 1) params += (FString) ", ";
+        if (i != parameters.Num() - 1) {
+            params += FString(", ");
+        }
     }
 
     params += FString("]");
@@ -139,7 +141,7 @@ void GamaClient::load(int64 socket_id, FString file_path, FString experiment_nam
     Socket -> Send(load_command);
 }
 
-void GamaClient::play(int64 socket_id, int32 exp_id, bool sync)
+void GamaClient::play(int64 socket_id, int32 exp_id, bool sync) const
 {
     if(!Socket -> IsConnected())
     {
@@ -158,7 +160,7 @@ void GamaClient::play(int64 socket_id, int32 exp_id, bool sync)
 }
 
 
-void GamaClient::pause(int64 socket_id, int32 exp_id)
+void GamaClient::pause(int64 socket_id, int32 exp_id) const
 {
     if(!Socket -> IsConnected())
     {
@@ -175,7 +177,7 @@ void GamaClient::pause(int64 socket_id, int32 exp_id)
     Socket -> Send(pause_command);
 }
 
-void GamaClient::step(int64 socket_id, int32 exp_id, int32 steps, bool sync)
+void GamaClient::step(int64 socket_id, int32 exp_id, int32 steps, bool sync) const
 {
     if(!Socket -> IsConnected())
     {
@@ -194,7 +196,7 @@ void GamaClient::step(int64 socket_id, int32 exp_id, int32 steps, bool sync)
     Socket -> Send(step_command);
 }
 
-void GamaClient::stepBack(int64 socket_id, int32 exp_id, int32 steps, bool sync)
+void GamaClient::stepBack(int64 socket_id, int32 exp_id, int32 steps, bool sync) const
 {
     if(!Socket -> IsConnected())
     {
@@ -213,7 +215,7 @@ void GamaClient::stepBack(int64 socket_id, int32 exp_id, int32 steps, bool sync)
     Socket -> Send(step_command);
 }
 
-void GamaClient::stop(int64 socket_id, int32 exp_id)
+void GamaClient::stop(int64 socket_id, int32 exp_id) const
 {
     if(!Socket -> IsConnected())
     {
@@ -230,7 +232,7 @@ void GamaClient::stop(int64 socket_id, int32 exp_id)
     Socket -> Send(stop_command);
 }
 
-void GamaClient::reload(int64 socket_id, int32 exp_id, TArray<ExpParameter*> parameters, FString end_condition)
+void GamaClient::reload(int64 socket_id, int32 exp_id, TArray<ExpParameter*> parameters, FString end_condition) const
 {
     if(!Socket -> IsConnected())
     {
@@ -258,7 +260,7 @@ void GamaClient::reload(int64 socket_id, int32 exp_id, TArray<ExpParameter*> par
     Socket -> Send(reload_command);
 }
 
-void GamaClient::expression(int64 socket_id, int32 exp_id, FString expr)
+void GamaClient::expression(int64 socket_id, int32 exp_id, FString expr) const
 {
     if(!Socket -> IsConnected())
     {

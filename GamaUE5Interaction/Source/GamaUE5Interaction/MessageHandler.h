@@ -17,8 +17,8 @@ public:
 	MessageHandler();
 
 	// Get simulation parameters
-	int32 GetExpId();
-	int64 GetSocketId();
+	int32 GetExpId() const;
+	int64 GetSocketId() const;
 
 	// Handle commands returned by Json messages
 	void HandleCommand(TSharedPtr<FJsonObject> MyJson);

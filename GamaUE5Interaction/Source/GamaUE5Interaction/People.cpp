@@ -26,14 +26,16 @@ APeople::APeople()
 	
 }
 
-void APeople::Init(int32 ID, float x, float y)
+void APeople::Init(int32 ID, float x, float y, float rotation)
 {
 	// Set values for attributes
 	id = ID;
 	position.X = x;
 	position.Y = y;
+	heading = FRotator(0, rotation,0);
 
-	SetActorLocation(position);
+	//not needed anymore
+	//SetActorLocationAndRotation(position, heading);
 }
 
 // Called when the game starts or when spawned
@@ -76,11 +78,11 @@ int32 APeople::GetY()
 	return position.Y;
 }
 
-void APeople::SetPosition(float x, float y, float heading)
+void APeople::SetPosition(float x, float y, float rotation)
 {
 	position.X = x;
 	position.Y = y;
-	SetActorLocation(position);
-	SetActorRotation(FRotator(0,heading,0));
+	this->heading = FRotator(0, rotation, 0);
+	SetActorLocationAndRotation(position, heading, true);
 }
 

@@ -15,7 +15,7 @@ ExpParameter::ExpParameter(FString Type, FString Value, FString Name)
     name = Name;
 }
 
-FString ExpParameter::Convert()
+FString ExpParameter::Convert() const
 {
     FString parameter = ("\
     {\

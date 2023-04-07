@@ -21,7 +21,7 @@ public:
 	void HandleConnectionSuccessful(TSharedPtr<FJsonObject> MyJson);
 	void HandleCommandExecutedSuccessfully(TSharedPtr<FJsonObject> MyJson);
 
-	bool IsPlaying();
+	bool IsPlaying() const;
 	
 	~GamaActionsMessageHandler();
 };

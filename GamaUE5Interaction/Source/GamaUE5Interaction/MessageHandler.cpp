@@ -11,12 +11,12 @@ MessageHandler::MessageHandler()
     socket_id = 0;
 }
 
-int32 MessageHandler::GetExpId()
+int32 MessageHandler::GetExpId() const
 {
     return exp_id;
 }
 
-int64 MessageHandler::GetSocketId()
+int64 MessageHandler::GetSocketId() const
 {
     return socket_id;
 }

@@ -16,17 +16,21 @@ global skills:[network]{
 	unknown ue_client;
 	bool initialized <- false;
 	
+	//constants
+	int empty_building_type <- 0;
+	int house_type 			<- 1;
+	int office_type 		<- 2;
 	
 	// Simulation parameters
 	float step <- 1#second;
+	int office_capacity <- 50 parameter:true;
+	int house_capacity <- 50 parameter:true;
 	
 	list available_office <- [];
 	graph road_network;
 	map<road,float> new_weights;
 	geometry shape <- square(30*8);
 	
-	int office_capacity <- 50 parameter:true;
-	int house_capacity <- 50 parameter:true;
 	
 	
 	init{	
@@ -43,6 +47,7 @@ global skills:[network]{
 					location <- ev.location;
 					shape <- ev.shape;
 					b <- self;
+					id <- i * 8 + j;
 				}	
 				if (flip(2/3.0)) {
 					house h <- change_empty_building_to_house(b);
@@ -77,19 +82,13 @@ global skills:[network]{
 	action send_world {
 		
 		map to_send;
-		let buildings <- [];
+		let buildings <- 64 list_with 0;
 		let people <- [];
-		loop b over:empty_building {
-			buildings <+ b.to_json();
-		}
-		loop b over:office {
-			buildings <+ b.to_json();
-		}
-		loop b over:house{
-			buildings <+ b.to_json();
+		loop b over:empty_building + office + house {
+			buildings[b.id] <- b.type;
 		}
 		loop p over:inhabitant {
-			people <+ p.to_json();
+			people <+ p.to_array();
 		}
 		to_send <+ "building"::buildings;
 		to_send <+ "people"::people;
@@ -126,14 +125,26 @@ global skills:[network]{
 	    	ue_client <- s.sender; // updates the client
 	    	if s.contents != "connected" {
 	    		let answer <- map(s.contents);
-	    		if answer["type"] = "house" and house(int(answer["id"])) != nil {
-	    			do change_house_to_office(house(int(answer["id"])));
+	    		if int(answer["type"]) = house_type{
+	    			let h <- first(house select (each.id = int(answer["id"])));
+	    			write "change house to office " + h;
+	    			if h != nil {
+		    			do change_house_to_office(h);	    				
+	    			}
 	    		}
-	    		else if answer["type"] = "office" and office(int(answer["id"])) != nil {
-	    			do change_office_to_empty_building(office(int(answer["id"])));
+	    		else if int(answer["type"]) = office_type{
+	    			let o <- first(office select (each.id = int(answer["id"])));
+	    			write "change office to empty " + o;
+	    			if (o != nil){
+		    			do change_office_to_empty_building(o);	    				
+	    			}
 	    		}
-	    		else if answer["type"] = "empty" and empty_building(int(answer["id"])) != nil {
-	    			do change_empty_building_to_house(empty_building(int(answer["id"])));
+	    		else if int(answer["type"]) = empty_building_type{
+	    			let e <- first(empty_building select (each.id = int(answer["id"])));
+	    			write "change empty to house " + e;	 
+	    			if e != nil {
+		    			do change_empty_building_to_house(e);	    				
+	    			}   			
 	    		}
 	    	}
 	    }	
@@ -200,6 +211,7 @@ global skills:[network]{
 		create office{
 			location <- old_house.location;
 			shape <- old_house.shape;	
+			id <- old_house.id;
 			o <- self;
 		}
 		ask old_house{
@@ -213,6 +225,7 @@ global skills:[network]{
 		create empty_building {
 			location <- old_office.location;
 			shape <- old_office.shape;	
+			id <- old_office.id;
 			b <- self;
 		}
 
@@ -232,6 +245,7 @@ global skills:[network]{
 		create house{
 			location <- old_building.location;
 			shape <- old_building.shape;
+			id <- old_building.id;
 			create inhabitant number: house_capacity{
 				location <- any_location_in((myself).shape);
 				house_location <- location;
@@ -313,7 +327,7 @@ species inhabitant skills:[moving]{
 	}	
 	
 	map to_json {
-		return map("id"::int(self), "location":: map('x'::int(location.x), 'y'::int(location.y)), "heading"::int(heading));
+		return map("id"::int(self), 'x'::int(location.x), 'y'::int(location.y), "heading"::int(heading));
 	}
 	
 	list to_array {
@@ -329,28 +343,29 @@ species road{
 }
 
 species building {
-	string type <- "default";
+	int type <- -1;
+	int id;
 	map to_json {
-		return map("id":: int(self), "type":: type, "location":: map('x'::int(location.x), 'y'::int(location.y)));
+		return map("id":: id, "type":: type);
 	}
 }
 
 species empty_building parent:building{
 	
 	rgb color <- #grey;
-	string type <- "empty";
+	int type <- empty_building_type;
 	
 
 }
 
 species house parent:building{
 	rgb color <- #blue;
-	string type <- "house";
+	int type <- house_type;
 }
 
 species office parent:building{
 	rgb color <- #orange;
-	string type <- "office";
+	int type <- office_type;
 }
 
 grid environment height:8 width:8 neighbors:4{

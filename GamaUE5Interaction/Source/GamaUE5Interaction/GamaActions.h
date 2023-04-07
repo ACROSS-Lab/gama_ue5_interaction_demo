@@ -7,6 +7,7 @@
 #include "GamaClient.h"
 #include "GamaActionsMessageHandler.h"
 #include "ObjectHandler.h"
+#include "BuildingTypes.h"
 #include "GamaActions.generated.h"
 
 UCLASS(BlueprintType)
@@ -52,6 +53,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 
 	// Send changes to Gama
-	void SendChange(FString type, int32 ID);
+	void SendChange(int type,int32 ID) const;
 	
 };

@@ -29,12 +29,12 @@ void ABuilding::Tick(float DeltaTime)
 }
 
 
-FString ABuilding::GetType()
+int ABuilding::GetType() const
 {
 	return type;
 }
 
-int32 ABuilding::GetID()
+int32 ABuilding::GetID() const
 {
 	return id;
 }

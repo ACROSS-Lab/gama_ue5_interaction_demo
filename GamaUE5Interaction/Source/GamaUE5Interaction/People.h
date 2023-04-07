@@ -15,6 +15,7 @@ private:
 	// Basic properties
 	int32 id;
 	FVector position;
+	FRotator heading;
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMesh; //Graphical representation
 
@@ -23,7 +24,7 @@ public:
 	APeople();
 
 	// Sets customized values for this character's properties
-	void Init(int32 ID, float x, float y);
+	void Init(int32 ID, float x, float y, float heading);
 
 protected:
 	// Called when the game starts or when spawned
