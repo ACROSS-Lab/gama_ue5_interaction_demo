@@ -7,7 +7,6 @@
 #include "GamaClient.h"
 #include "GamaActionsMessageHandler.h"
 #include "ObjectHandler.h"
-#include "BuildingTypes.h"
 #include "GamaActions.generated.h"
 
 UCLASS(BlueprintType)
