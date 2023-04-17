@@ -65,9 +65,22 @@ void GamaMap::InitOrUpdatePeople(int id, int x, int y, int heading, UWorld* Curr
 
 }
 
-void GamaMap::RemovePeople(int id)
+void GamaMap::RemovePeople(int id, UWorld* CurrentWorld)
 {
-	People.Remove(id);
+	if (People.Contains(id)) {
+		auto people = People[id];
+		bool success = CurrentWorld->DestroyActor(people);
+		if (success) {
+			People.Remove(id);
+		}
+		else {
+			// at least we hide it
+			people->SetHidden(true);
+			people->SetActorEnableCollision(false);
+		}
+
+	}
+
 }
 
 void GamaMap::SetBuildingVisible(ABuilding::BuildingTypes t, int id) const

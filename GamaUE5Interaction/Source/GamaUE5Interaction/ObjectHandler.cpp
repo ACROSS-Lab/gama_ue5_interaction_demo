@@ -66,7 +66,7 @@ void AObjectHandler::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, U
 	//TArray<int> old_people_ids = map->GetPeopleIds(); // we explicitly make a copy
 	for (int id : map->GetPeopleIds()) {
 		if (!ids.Contains(id)) {
-			map->RemovePeople(id);
+			map->RemovePeople(id, CurrentWorld);
 		}
 	}
 
