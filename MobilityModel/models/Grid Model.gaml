@@ -88,7 +88,10 @@ global skills:[network]{
 			buildings[b.id] <- b.type;
 		}
 		loop p over:inhabitant {
-			people <+ p.to_array();
+			//only send the ones on the road
+			if [p.office_location,p.house_location] none_matches (each != nil and each.x = p.location.x and each.y = p.location.y) {
+				people <+ p.to_array();				
+			}
 		}
 		to_send <+ "building"::buildings;
 		to_send <+ "people"::people;
@@ -375,7 +378,9 @@ grid environment height:8 width:8 neighbors:4{
 
 experiment grid_model type:gui autorun:true{
 
-	float minimum_cycle_duration <- 0.5#second;
+	float minimum_cycle_duration <- 0.1#second;
+
+
 
 	output{
 		
@@ -386,7 +391,7 @@ experiment grid_model type:gui autorun:true{
 			species house;
 			species office;
 			species inhabitant aspect: default;
-			event mouse_down action:mouse_click;
+			event #mouse_down action:mouse_click;
 		}	
 	}
 }

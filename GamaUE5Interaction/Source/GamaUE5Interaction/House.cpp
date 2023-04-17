@@ -18,7 +18,7 @@ AHouse::AHouse()
 
 	
 	// Load the house building
-	UStaticMesh* buildingMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/StaticMesh_office_bis.StaticMesh_office_bis'")).Object;
+	UStaticMesh* buildingMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/Meshes/StaticMesh_house.StaticMesh_house'")).Object;
 	
 	StaticMesh->SetStaticMesh(buildingMesh);
 	StaticMesh->SetMobility(EComponentMobility::Static);

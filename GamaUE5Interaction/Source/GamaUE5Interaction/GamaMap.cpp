@@ -12,7 +12,9 @@ void GamaMap::Init(UWorld* CurrentWorld)
 	for (int x = 0; x < 8; x++) {
 		for (int y = 0; y < 8; y++) {
 
-			const FVector* Loc = new FVector(x * scaling_factor + x_offset, y * scaling_factor + y_offset, 0);
+			const FVector* Loc = new FVector(	x * building_width_in_gama * scaling_factor + x_offset + building_width_in_gama  * scaling_factor / 2, 
+												y * building_width_in_gama * scaling_factor + y_offset + building_height_in_gama * scaling_factor / 2,
+												0);
 			
 			AHouse* house = (AHouse*)CurrentWorld->SpawnActor(AHouse::StaticClass(), Loc);
 			if (house != nullptr) {

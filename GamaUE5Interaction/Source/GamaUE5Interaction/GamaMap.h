@@ -26,9 +26,11 @@ protected:
 	TMap<int, APeople*>		People;
 
 	// Transformation parameters to scale to the world coordinates
-	const int32 scaling_factor	= 15000;
-	const int32 x_offset		= -30000;
-	const int32 y_offset		= -50000;
+	const int32 scaling_factor			= 500;
+	const int32 building_width_in_gama	= 30;
+	const int32 building_height_in_gama = 30;
+	const int32 x_offset				= -30000;
+	const int32 y_offset				= -50000;
 
 
 public:
