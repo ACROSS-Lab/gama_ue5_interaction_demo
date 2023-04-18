@@ -20,22 +20,40 @@ global skills:[network]{
 	int empty_building_type <- 0;
 	int house_type 			<- 1;
 	int office_type 		<- 2;
+	int num_lanes_roads <- 3;
 	
 	// Simulation parameters
-	float step <- 1#second;
-	int office_capacity <- 50 parameter:true;
-	int house_capacity <- 50 parameter:true;
+	float step <- 3#second;
+	int office_capacity <- 50 parameter:"Office capacity";
+	int house_capacity <- 30 parameter:"House capacity";
 	
 	list available_office <- [];
 	graph road_network;
 	map<road,float> new_weights;
 	geometry shape <- square(30*8);
 	
+	float lane_width <- 1.5;
+	
 	
 	
 	init{	
-		create road from: split_lines(union(environment collect each.shape.contour));	
-		road_network <- as_edge_graph(road);
+		
+		create road from: clean_network((union(environment collect each.shape.contour)).geometries,0.1,true,true)  {
+			num_lanes <- num_lanes_roads;
+			create road {
+				shape <- line(reverse(myself.shape.points));
+				num_lanes <- num_lanes_roads;
+			}
+		}
+		graph tmp <- as_edge_graph(road);
+		loop pt over: tmp.vertices {
+			create intersection with:(location:pt.location);
+		
+		}
+		
+			//build the graph from the roads and intersections
+		road_network <- as_driving_graph(road,intersection);
+		
 		
 		//initialize with empty buildings everywhere
 		loop i from:0 to:7 {
@@ -154,7 +172,7 @@ global skills:[network]{
 	}
 
 	//when a road is busy, it turns into yellow & inhabitant's speed decreases
-	reflex update_road{
+/*	reflex update_road{
 //		map<road,float> weights_map <- road as_map (each::(count(inhabitant overlapping each)) / each.shape.perimeter));
 //		road_network <- as_edge_graph(road) with_weight weights_map;
 		loop i over: road{
@@ -178,7 +196,7 @@ global skills:[network]{
 			}
 			//write 'traffic'+ nb_people_on_road/i.shape.perimeter;
 		}
-	}
+	} */
 
 	reflex update_office_location{
 		ask inhabitant{
@@ -292,45 +310,119 @@ global skills:[network]{
 			}	
 		}
 	}
-	
 }
 
 
 
-species inhabitant skills:[moving]{
+species inhabitant skills:[advanced_driving] {
 	point office_location <- nil;
 	point house_location <- nil;
 	point target <- nil;
 	rgb color;
-	float initial_speed <- 30#km/#h;
+	float initial_speed <- rnd(1.5,3.5)#km/#h;	
+	point shift_pt <- location ;	
+	bool at_home <- true;
 	
 	init {
 		color <- rnd_color(225);
-		speed <- initial_speed;
+		vehicle_length <- 2.8 #m;
+		//car occupies 2 lanes
+		num_lanes_occupied <-1;
+		max_speed <-30 #km / #h;
+				
+		proba_respect_priorities <- 0.0;
+		proba_respect_stops <- [1.0];
+		proba_use_linked_road <- 0.0;
+
+		lane_change_limit <- 2;
+		linked_lane_limit <- 0;
+		
 	}
 
-	aspect default{
-		draw circle(1) color: color;
+	/*aspect default{
+		draw circle(1) at:shift_pt color: color;
+	}*/
+	
+	aspect default {
+		if (current_road != nil) {
+			point pos <-shift_pt;
+				draw rectangle(vehicle_length, lane_width * num_lanes_occupied) 
+				at: pos color: color rotate: heading border: #black;
+			draw triangle(lane_width * num_lanes_occupied) 
+				at: pos color: #white rotate: heading + 90 ;
+		}
 	}
 
-	reflex choose_target{		
-		if(current_date.hour >= 7 and current_date.hour <= 17){
-			target <- office_location;
+/* 	reflex choose_target{	
+		if current_date.minute > 30{
+			target <- office_location;			
+		}	
+		else {
+			target <- house_location;
 		}
-		else{
-			target <- house_location;			
+//		if(		current_date.hour >= 7 and current_date.hour < 12
+//			or 	current_date.hour >= 14 and current_date.hour <= 17 )
+//		{
+//			target <- office_location;
+//		}
+//		else if current_date.hour >= 18 and current_date.hour < 23{
+//			target <- any_location_in(one_of(empty_building));
+//		}
+//		else {
+//			target <- house_location;						
+//		}
+	}*/
+	
+	//choose a random target and compute the path to it
+	reflex choose_path when: final_target = nil and flip(0.01) and office_location != nil {
+		if at_home{
+			target <- office_location;	
+			at_home <- false;		
+		}	
+		else {
+			target <- house_location;
+			at_home <- true;		
 		}
+		location <- (intersection closest_to self).location;
+		intersection t <-  intersection closest_to target;
+		do compute_path graph: road_network target: t; 
+		
+	}
+	reflex move when: final_target != nil {
+		do drive;
+		//if arrived at target, kill it and create a new car
+		if (final_target = nil) {
+			do unregister;
+			if (at_home) {
+				location <-house_location;
+			} else {
+				location <-office_location;
+			}
+		//	do die;
+		}
+		shift_pt <-compute_position()		;
 	}
 	
-	reflex moving {
-		if  target = nil {
-			target <- any_location_in(world);
+	
+	point compute_position {
+		// Shifts the position of the vehicle perpendicularly to the road,
+		// in order to visualize different lanes
+		if (current_road != nil) {
+			float dist <- (road(current_road).num_lanes - current_lane -
+				mean(range(num_lanes_occupied - 1)) - 0.5) * lane_width;
+			if violating_oneway {
+				dist <- -dist;
+			}
+		 	
+			return location + {cos(heading + 90) * dist, sin(heading + 90) * dist};
+		} else {
+			return {0, 0};
 		}
-		do goto target:target on:road_network speed:speed;			
 	}	
 	
 	map to_json {
-		return map("id"::int(self), 'x'::int(location.x), 'y'::int(location.y), "heading"::int(heading));
+	
+		return map("id"::int(self), 'x'::shift_pt.x with_precision 1, 'y'::shift_pt.y with_precision 1, "heading"::int(heading)); 
 	}
 	
 	list to_array {
@@ -338,10 +430,17 @@ species inhabitant skills:[moving]{
 	}
 }
 
-species road{
+
+
+species intersection skills: [skill_road_node] {
+	aspect default{
+		draw square(2) color: color;
+	}
+}
+species road skills: [skill_road]{
 	rgb color <- #black;
 	aspect default{
-		draw shape color: color;
+		draw shape color: color end_arrow:1.0;
 	}
 }
 
@@ -387,9 +486,11 @@ experiment grid_model type:gui autorun:true{
 		display main_display type:opengl axes:false{
 			//grid environment border: #black;
 			species empty_building;
+			species intersection;
 			species road aspect: default;
 			species house;
 			species office;
+			
 			species inhabitant aspect: default;
 			event #mouse_down action:mouse_click;
 		}	

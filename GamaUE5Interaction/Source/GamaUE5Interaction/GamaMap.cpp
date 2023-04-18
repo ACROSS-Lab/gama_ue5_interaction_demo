@@ -44,13 +44,15 @@ void GamaMap::Init(UWorld* CurrentWorld)
 
 }
 
-void GamaMap::InitOrUpdatePeople(int id, int x, int y, int heading, UWorld* CurrentWorld)
+void GamaMap::InitOrUpdatePeople(int id, float x, float y, int heading, UWorld* CurrentWorld)
 {
 	int new_x = x_offset + scaling_factor * x;
 	int new_y = y_offset + scaling_factor * y;
 	
 	if (People.Contains(id)) {
 		People[id]->SetPosition(new_x, new_y, heading);
+		People[id]->SetHidden(false);
+		People[id]->SetActorEnableCollision(true);
 	}
 	else {
 
@@ -69,15 +71,17 @@ void GamaMap::RemovePeople(int id, UWorld* CurrentWorld)
 {
 	if (People.Contains(id)) {
 		auto people = People[id];
+		/*
 		bool success = CurrentWorld->DestroyActor(people);
 		if (success) {
 			People.Remove(id);
 		}
 		else {
 			// at least we hide it
+		*/
 			people->SetHidden(true);
 			people->SetActorEnableCollision(false);
-		}
+		//}
 
 	}
 

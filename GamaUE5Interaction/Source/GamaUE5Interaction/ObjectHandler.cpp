@@ -55,8 +55,8 @@ void AObjectHandler::HandlePeople(const TArray<TSharedPtr<FJsonValue>>*& Info, U
 	{
 		TArray<TSharedPtr<FJsonValue>> obj = (*Info)[i]->AsArray();
 		int32 id		= obj[0]->AsNumber();
-		int32 x			= obj[1]->AsNumber();
-		int32 y			= obj[2]->AsNumber();
+		float x			= obj[1]->AsNumber();
+		float y			= obj[2]->AsNumber();
 		int32 heading	= obj[3]->AsNumber();
 		map->InitOrUpdatePeople(id, x, y, heading, CurrentWorld);
 		ids.Add(id);

@@ -40,7 +40,7 @@ public:
 
 	void Init(UWorld* CurrentWorld);
 
-	void InitOrUpdatePeople(int id, int x, int y, int heading, UWorld* CurrentWorld);
+	void InitOrUpdatePeople(int id, float x, float y, int heading, UWorld* CurrentWorld);
 	void RemovePeople(int id, UWorld* CurrentWorld);
 	void SetBuildingVisible(ABuilding::BuildingTypes t, int id) const;
 
