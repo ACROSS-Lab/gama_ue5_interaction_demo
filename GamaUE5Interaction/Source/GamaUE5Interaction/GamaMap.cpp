@@ -46,8 +46,8 @@ void GamaMap::Init(UWorld* CurrentWorld)
 
 void GamaMap::InitOrUpdatePeople(int id, float x, float y, int heading, UWorld* CurrentWorld)
 {
-	int new_x = x_offset + scaling_factor * x;
-	int new_y = y_offset + scaling_factor * y;
+	float new_x = x_offset + scaling_factor * x;
+	float new_y = y_offset + scaling_factor * y;
 	
 	if (People.Contains(id)) {
 		People[id]->SetPosition(new_x, new_y, heading);
